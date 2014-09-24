@@ -58,7 +58,7 @@ public void onSnackBarFinished(Object object){
 ```
 
 # Canceling SnackBars
-### When your activity goes into a Paused on Destroyed state, remove the SnackBars from the queue
+### When your activity goes into a Paused or Destroyed state, remove the SnackBars from the queue
 ```
 SnackBar.cancelSnackBars(getActivity());
 ```
