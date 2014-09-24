@@ -10,6 +10,7 @@ SnackBar
 - Customization including message, action message, action color, action click handle, and animation duration
 - Tablet support 
 - Callbacks for the different SnackBar states (started, actionClicked, finished)
+- One Message at a time
 - Support for Api version 14+
 
 
@@ -54,6 +55,12 @@ public void onSnackBarAction(Object object){
 @Override
 public void onSnackBarFinished(Object object){
 }
+```
+
+# Canceling SnackBars
+### When your activity goes into a Paused on Destroyed state, remove the SnackBars from the queue
+```
+SnackBar.cancelSnackBars(getActivity());
 ```
 
 #Contribution
