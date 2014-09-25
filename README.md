@@ -1,5 +1,6 @@
 SnackBar
 ========
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Kennyc1012%2FSnackBar-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/997)
 
 #Designed after the docs at [Google Material Design](http://www.google.com/design/spec/components/snackbars-and-toasts.html)
 
