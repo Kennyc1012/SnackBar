@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="snackbar_appear_animation_length">100</integer>
+    <integer name="snackbar_disappear_animation_length">250</integer>
+
+</resources>

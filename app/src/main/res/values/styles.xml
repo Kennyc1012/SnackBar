@@ -1,7 +1,7 @@
 <resources>
 
     <style name="Snack_Bar">
-        <item name="android:background">@color/snack_back_bg</item>
+        <item name="android:background">@color/snack_bar_bg</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:paddingLeft">@dimen/snack_bar_left_right_padding</item>

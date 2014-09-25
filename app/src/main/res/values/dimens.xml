@@ -7,7 +7,7 @@
     <dimen name="snack_bar_left_right_padding">24dp</dimen>
     <dimen name="snack_bar_top_padding">16dp</dimen>
     <dimen name="snack_bar_bottom_padding">12dp</dimen>
-    <dimen name="snack_bar_animation_height">0dp</dimen>
+    <dimen name="snack_bar_animation_position">0dp</dimen>
     <dimen name="snack_bar_action_text_size">14sp</dimen>
 
 </resources>

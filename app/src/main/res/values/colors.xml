@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="snack_back_bg">#323232</color>
+    <color name="snack_bar_bg">#323232</color>
 
 </resources>
