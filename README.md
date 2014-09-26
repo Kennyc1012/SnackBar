@@ -8,8 +8,9 @@ SnackBar
 ![imgone](https://github.com/Kennyc1012/SnackBar/raw/master/two.png)
 
 #Features
-- Customization including message, action message, action color, action click handle, and animation duration
+- Customization including message, action message, action color, message color, background color, action click handle, animation duration, and animation interpolator  
 - Tablet support 
+- Swipe to dismiss
 - Callbacks for the different SnackBar states (started, actionClicked, finished)
 - One Message at a time
 - Support for Api version 14+
@@ -33,6 +34,9 @@ SnackBarItem sbi = new SnackBarItem.Builder().setMessage("Message")
 .setActionClickListener(myClickListener)
 .setActionMessageColor(getResources().getColor(R.color.my_red))
 .setActionMessagePressedColor(getResources().getColor(R.color.my_blue))
+.setSnackBarMessageColor(getResources().getColor(R.color.my_yellow))
+.setSnackBarBackgroundColor(getResources().getColor(R.color.my_green)
+.setInterpolator(new OvershootInterpolator())
 .setDuration(5000)
 .setSnackBarListener(myListener)
 .build();
