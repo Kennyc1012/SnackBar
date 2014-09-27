@@ -203,33 +203,31 @@ public class SnackBarItem {
                         int[] location = new int[2];
                         view.getLocationInWindow(location);
 
-                        if (y > mPreviousY) {
-                            if ((view.getResources().getDisplayMetrics().heightPixels - location[1]) - 100 <= 0) {
-                                mShouldDisposeOnCancel = false;
-                                mAnimator.cancel();
-                                ObjectAnimator anim = ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 0.0f).setDuration(view.getResources().getInteger(R.integer.snackbar_disappear_animation_length));
-                                anim.addListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationCancel(Animator animation) {
-                                        super.onAnimationCancel(animation);
-                                        dispose();
-                                    }
-
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        super.onAnimationEnd(animation);
-                                        dispose();
-
-                                        if (mSnackBarListener != null) {
-                                            mSnackBarListener.onSnackBarFinished(mObject);
-                                        }
-                                    }
-                                });
-                                anim.start();
-
-                                if (mSnackBarListener != null) {
-                                    mSnackBarListener.onSnackBarFinished(mObject);
+                        if (y > mPreviousY && y - mPreviousY >= 50) {
+                            mShouldDisposeOnCancel = false;
+                            mAnimator.cancel();
+                            ObjectAnimator anim = ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 0.0f).setDuration(view.getResources().getInteger(R.integer.snackbar_disappear_animation_length));
+                            anim.addListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+                                    super.onAnimationCancel(animation);
+                                    dispose();
                                 }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    dispose();
+
+                                    if (mSnackBarListener != null) {
+                                        mSnackBarListener.onSnackBarFinished(mObject);
+                                    }
+                                }
+                            });
+                            anim.start();
+
+                            if (mSnackBarListener != null) {
+                                mSnackBarListener.onSnackBarFinished(mObject);
                             }
                         }
                 }
@@ -300,7 +298,7 @@ public class SnackBarItem {
                 mPressedActionColor, Typeface.createFromAsset(resources.getAssets(), "Roboto-Medium.ttf"));
 
         StateListDrawable stateListDrawable = new StateListDrawable();
-        stateListDrawable.addState(new int[]{android.R.attr.state_pressed, android.R.attr.state_focused}, pressed);
+        stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, pressed);
         stateListDrawable.addState(new int[]{}, regular);
         return stateListDrawable;
     }

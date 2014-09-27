@@ -4,8 +4,8 @@ SnackBar
 
 #Designed after the docs at [Google Material Design](http://www.google.com/design/spec/components/snackbars-and-toasts.html)
 
-![Gif](https://github.com/Kennyc1012/SnackBar/raw/master/three.gif)
-![imgone](https://github.com/Kennyc1012/SnackBar/raw/master/two.png)
+![phone](https://github.com/Kennyc1012/SnackBar/raw/master/phone.gif)
+![tablet](https://github.com/Kennyc1012/SnackBar/raw/master/tablet.gif)
 
 #Features
 - Customization including message, action message, action color, message color, background color, action click handle, animation duration, and animation interpolator  
