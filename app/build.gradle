@@ -6,20 +6,25 @@ android {
 
     defaultConfig {
         applicationId "com.kenny.snackbar"
-        minSdkVersion 14
         targetSdkVersion 20
         versionCode 1
         versionName "1.0"
     }
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+    productFlavors {
+        api11 {
+            minSdkVersion 11
+        }
+
+        api8 {
+            minSdkVersion 8
         }
     }
 }
 
 dependencies {
     compile 'com.android.support:support-annotations:+'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    api8Compile files('libs/nineoldandroids-2.4.0.jar')
 }
+
+// apply from: '../maven_push.gradle'

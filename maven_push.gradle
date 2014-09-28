@@ -1,100 +1,94 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
-{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-\margl1440\margr1440\vieww10800\viewh8400\viewkind0
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
-
-\f0\fs24 \cf0 apply plugin: 'maven'\
-apply plugin: 'signing'\
-\'a0\
-def sonatypeRepositoryUrl\
-if (isReleaseBuild()) \{\
-\'a0\'a0\'a0\'a0println 'RELEASE BUILD\
-\'a0\'a0\'a0\'a0sonatypeRepositoryUrl = hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0: "https://oss.sonatype.org/service/local/staging/deploy/maven2/"\
-\} else \{\
-\'a0\'a0\'a0\'a0println 'SNAPSHOT BUILD'\
-\'a0\'a0\'a0\'a0sonatypeRepositoryUrl = hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0: "https://oss.sonatype.org/content/repositories/snapshots/"\
-\'a0\
-\}\
-\'a0\
-def getRepositoryUsername() \{\
-\'a0\'a0\'a0\'a0return hasProperty('nexusUsername') ? nexusUsername : ""\
-\}\
-\'a0\
-def getRepositoryPassword() \{\
-\'a0\'a0\'a0\'a0return hasProperty('nexusPassword') ? nexusPassword : ""\
-\}\
-\'a0\
-afterEvaluate \{ project ->\
-\'a0\'a0\'a0\'a0uploadArchives \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0repositories \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0mavenDeployer \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0beforeDeployment \{ MavenDeployment deployment -> signing.signPom(deployment) \}\
-\'a0\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0pom.artifactId = POM_ARTIFACT_ID\
-\'a0\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0repository(url: sonatypeRepositoryUrl) \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\}\
-\'a0\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0pom.project \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0name POM_NAME\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0packaging POM_PACKAGING\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0description POM_DESCRIPTION\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0url POM_URL\
-\'a0\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0scm \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0url POM_SCM_URL\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0connection POM_SCM_CONNECTION\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0developerConnection POM_SCM_DEV_CONNECTION\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\}\
-\'a0\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0licenses \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0license \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0name POM_LICENCE_NAME\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0url POM_LICENCE_URL\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0distribution POM_LICENCE_DIST\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\}\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\}\
-\'a0\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0developers \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0developer \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0id POM_DEVELOPER_ID\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0name POM_DEVELOPER_NAME\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\}\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\}\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\}\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\}\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\}\
-\'a0\'a0\'a0\'a0\}\
-\'a0\
-\'a0\'a0\'a0\'a0signing \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0required \{ isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") \}\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0sign configurations.archives\
-\'a0\'a0\'a0\'a0\}\
-\'a0\
-\'a0\'a0\'a0\'a0task androidJavadocs(type: Javadoc) \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0source = android.sourceSets.main.allJava\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0classpath += project.files(android.plugin.getRuntimeJarList().join(File.pathSeparator))\
-\'a0\'a0\'a0\'a0\}\
-\'a0\
-\'a0\'a0\'a0\'a0task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0classifier = 'javadoc'\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0//basename = artifact_id\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0from androidJavadocs.destinationDir\
-\'a0\'a0\'a0\'a0\}\
-\'a0\
-\'a0\'a0\'a0\'a0task androidSourcesJar(type: Jar) \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0classifier = 'sources'\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0//basename = artifact_id\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0from android.sourceSets.main.allSource\
-\'a0\'a0\'a0\'a0\}\
-\'a0\
-\'a0\'a0\'a0\'a0artifacts \{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0//archives packageReleaseJar\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0archives androidSourcesJar\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0archives androidJavadocsJar\
-\'a0\'a0\'a0\'a0\}\
-\}}
+apply plugin: 'maven'
+apply plugin: 'signing'
+ 
+def sonatypeRepositoryUrl
+if (isReleaseBuild()) {
+    println 'RELEASE BUILD
+    sonatypeRepositoryUrl = hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
+            : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+} else {
+    println 'SNAPSHOT BUILD'
+    sonatypeRepositoryUrl = hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
+            : "https://oss.sonatype.org/content/repositories/snapshots/"
+ 
+}
+ 
+def getRepositoryUsername() {
+    return hasProperty('nexusUsername') ? nexusUsername : ""
+}
+ 
+def getRepositoryPassword() {
+    return hasProperty('nexusPassword') ? nexusPassword : ""
+}
+ 
+afterEvaluate { project ->
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+ 
+                pom.artifactId = POM_ARTIFACT_ID
+ 
+                repository(url: sonatypeRepositoryUrl) {
+                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                }
+ 
+                pom.project {
+                    name POM_NAME
+                    packaging POM_PACKAGING
+                    description POM_DESCRIPTION
+                    url POM_URL
+ 
+                    scm {
+                        url POM_SCM_URL
+                        connection POM_SCM_CONNECTION
+                        developerConnection POM_SCM_DEV_CONNECTION
+                    }
+ 
+                    licenses {
+                        license {
+                            name POM_LICENCE_NAME
+                            url POM_LICENCE_URL
+                            distribution POM_LICENCE_DIST
+                        }
+                    }
+ 
+                    developers {
+                        developer {
+                            id POM_DEVELOPER_ID
+                            name POM_DEVELOPER_NAME
+                        }
+                    }
+                }
+            }
+        }
+    }
+ 
+    signing {
+        required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
+        sign configurations.archives
+    }
+ 
+    task androidJavadocs(type: Javadoc) {
+        source = android.sourceSets.main.allJava
+        classpath += project.files(android.plugin.getRuntimeJarList().join(File.pathSeparator))
+    }
+ 
+    task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+        classifier = 'javadoc'
+        //basename = artifact_id
+        from androidJavadocs.destinationDir
+    }
+ 
+    task androidSourcesJar(type: Jar) {
+        classifier = 'sources'
+        //basename = artifact_id
+        from android.sourceSets.main.allSource
+    }
+ 
+    artifacts {
+        //archives packageReleaseJar
+        archives androidSourcesJar
+        archives androidJavadocsJar
+    }
+}
