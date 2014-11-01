@@ -1,12 +1,14 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 20
-    buildToolsVersion "20.0.0"
+    compileSdkVersion 21
+    buildToolsVersion "21.0.0"
+    defaultPublishConfig "api11Release"
+    publishNonDefault true
 
     defaultConfig {
         applicationId "com.kenny.snackbar"
-        targetSdkVersion 20
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
     }
@@ -27,4 +29,4 @@ dependencies {
     api8Compile files('libs/nineoldandroids-2.4.0.jar')
 }
 
-// apply from: '../maven_push.gradle'
+//apply from: 'maven_push.gradle'

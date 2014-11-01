@@ -92,6 +92,82 @@ public class SnackBar {
     }
 
     /**
+     * Shows a SnackBar
+     *
+     * @param activity The activity to show the Snack Bar in
+     * @param message  The Sting Resource of the message to show
+     * @param listener The SnackBarListener to handle callbacks
+     */
+    public static void show(Activity activity, @StringRes int message, SnackBarListener listener) {
+        SnackBarItem sbi = new SnackBarItem.Builder().setMessage(activity.getString(message))
+                .setSnackBarListener(listener).build();
+
+        SnackBarManager mngr = SnackBarManager.getInstance();
+        mngr.addSnackBar(activity, sbi);
+
+        if (!mngr.isShowingSnackBar()) {
+            mngr.showSnackBars(activity);
+        }
+    }
+
+    /**
+     * Shows a SnackBar
+     *
+     * @param activity      The activity to show the Snack Bar in
+     * @param message       The Sting Resource of the message to show
+     * @param actionMessage The String Resource of the action message to show
+     * @param listener      The SnackBarListener to handle callbacks
+     */
+    public static void show(Activity activity, @StringRes int message, @StringRes int actionMessage, SnackBarListener listener) {
+        SnackBarItem sbi = new SnackBarItem.Builder().setMessage(activity.getString(message))
+                .setActionMessage(activity.getString(actionMessage)).setSnackBarListener(listener).build();
+
+        SnackBarManager mngr = SnackBarManager.getInstance();
+        mngr.addSnackBar(activity, sbi);
+
+        if (!mngr.isShowingSnackBar()) {
+            mngr.showSnackBars(activity);
+        }
+    }
+
+    /**
+     * Shows a SnackBar
+     *
+     * @param activity      The activity to show the Snack Bar in
+     * @param message       The message to show
+     * @param actionMessage The action message to show
+     * @param listener      The SnackBarListener to handle callbacks
+     */
+    public static void show(Activity activity, String message, String actionMessage, SnackBarListener listener) {
+        SnackBarItem sbi = new SnackBarItem.Builder().setMessage(message)
+                .setActionMessage(actionMessage).setSnackBarListener(listener).build();
+
+        SnackBarManager mngr = SnackBarManager.getInstance();
+        mngr.addSnackBar(activity, sbi);
+
+        if (!mngr.isShowingSnackBar()) {
+            mngr.showSnackBars(activity);
+        }
+    }
+
+    /**
+     * Shows a SnackBar
+     *
+     * @param activity The activity to show the Snack Bar in
+     * @param message  The message to show
+     * @param listener The SnackBarListener to handle callbacks
+     */
+    public static void show(Activity activity, String message, SnackBarListener listener) {
+        SnackBarItem sbi = new SnackBarItem.Builder().setMessage(message).setSnackBarListener(listener).build();
+        SnackBarManager mngr = SnackBarManager.getInstance();
+        mngr.addSnackBar(activity, sbi);
+
+        if (!mngr.isShowingSnackBar()) {
+            mngr.showSnackBars(activity);
+        }
+    }
+
+    /**
      * Shows a Snack Bar
      *
      * @param activity     The activity to show the Snack Bar in
