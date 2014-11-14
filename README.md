@@ -69,26 +69,22 @@ SnackBar.cancelSnackBars(getActivity());
 ```
 
 #Including in your project
-To include SnackBar in your project, download the appropriate aar (snack_bar_api8.aar for support
-for Api 8+ and snack_bar_api11.aar for support for Api 11+). Place the aar into the libs folder of your project and add the following to your projects build.gradle file
+To include SnackBar in your project, add the following to your build.gradle file.
 ```
 repositories {
-    flatDir {
-        dirs 'libs'
-    }
+   maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    mavenCentral()
 }
 
 
 dependencies {
     // For api11+
-    compile(name: 'snack_bar_api11', ext: 'aar')
-    //OR
+    compile 'com.github.kennyc1012:snackbar:1.0.1-SNAPSHOT:api11Release@aar'
     // For api8+
-    compile(name: 'snack_bar_api8', ext:'aar')
+    compile 'com.github.kennyc1012:snackbar:1.0.1-SNAPSHOT:api8Release@aar'
 }
 ```
 
-Maven support coming soon...
 
 #Contribution
 Pull requests are welcomed and encouraged. If you experience any bugs, please [file an issue](https://github.com/Kennyc1012/SnackBar/issues/new)
