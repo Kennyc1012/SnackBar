@@ -5,6 +5,7 @@ SnackBar
 #Designed after the docs at [Google Material Design](http://www.google.com/design/spec/components/snackbars-and-toasts.html)
 
 ![phone](https://github.com/Kennyc1012/SnackBar/raw/master/phone.gif)
+
 ![tablet](https://github.com/Kennyc1012/SnackBar/raw/master/tablet.gif)
 
 #Features
@@ -18,16 +19,16 @@ SnackBar
 
 #Using SnackBar
 #### Using SnackBar is simple, just one line of code is needed!
-```
+```java
 SnackBar.show(getActivity(), R.string.hello_world);
 ```
 ### Or if you want to set an action
-```
+```java
 SnackBar.show(getActivity(), R.string.hello_world, R.string.undo,onClickListener);
 ```
 #Customization
 ### SnackBars can be customizedby creating a SnackBarItem with the Builder factory
-```
+```java
 SnackBarItem sbi = new SnackBarItem.Builder().setMessage("Message")
 .setActionMessage("Action")
 .setObject(myObject)
@@ -44,7 +45,7 @@ SnackBarItem sbi = new SnackBarItem.Builder().setMessage("Message")
 SnackBar.show(getActivity(),sbi);
 ```
 ### Receive callbacks from SnackBars with an Object
-```
+```java
 // Called when the SnackBar begins to animate
 @Override
 publc void onSnackBarStarted(Object object){
@@ -64,13 +65,13 @@ public void onSnackBarFinished(Object object){
 
 # Canceling SnackBars
 ### When your activity goes into a Paused or Destroyed state, remove the SnackBars from the queue
-```
+```java
 SnackBar.cancelSnackBars(getActivity());
 ```
 
 #Including in your project
 To include SnackBar in your project, add the following to your build.gradle file.
-```
+```groovy
 repositories {
    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     mavenCentral()
