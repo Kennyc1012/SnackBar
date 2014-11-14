@@ -2,15 +2,15 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.0"
-    defaultPublishConfig "api11Release"
+    buildToolsVersion "21.1.0"
+    defaultPublishConfig "api11"
     publishNonDefault true
 
     defaultConfig {
         applicationId "com.kenny.snackbar"
         targetSdkVersion 21
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.1"
     }
 
     productFlavors {
