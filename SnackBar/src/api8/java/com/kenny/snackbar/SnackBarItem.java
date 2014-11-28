@@ -64,6 +64,8 @@ public class SnackBarItem {
     // the action button is selected so it removes immediately.
     private boolean mShouldDisposeOnCancel = true;
 
+    private boolean mIsDisposed = false;
+
     private Activity mActivity;
 
     // Callback for the SnackBarManager
@@ -190,7 +192,7 @@ public class SnackBarItem {
 
     private Animator setupAppearAnimation(Resources resources, View view) {
         AnimatorSet set = new AnimatorSet().setDuration(resources.getInteger(R.integer.snackbar_appear_animation_length));
-        set.playSequentially(
+        set.playTogether(
                 ObjectAnimator.ofFloat(view, "alpha", 0.0f, 1.0f),
                 ObjectAnimator.ofFloat(view, "translationY", resources.getDimension(R.dimen.snack_bar_height),
                         resources.getDimension(R.dimen.snack_bar_animation_position))
@@ -207,6 +209,8 @@ public class SnackBarItem {
         mSnackBarView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
+                if (mIsDisposed) return false;
+
                 float y = event.getY();
 
                 switch (event.getAction()) {
@@ -235,11 +239,8 @@ public class SnackBarItem {
                                     }
                                 }
                             });
-                            anim.start();
 
-                            if (mSnackBarListener != null) {
-                                mSnackBarListener.onSnackBarFinished(mObject);
-                            }
+                            anim.start();
                         }
                 }
 
@@ -329,6 +330,8 @@ public class SnackBarItem {
      * Cleans up the Snack Bar when finished
      */
     private void dispose() {
+        mIsDisposed = true;
+
         if (mSnackBarView != null) {
             FrameLayout parent = (FrameLayout) mSnackBarView.getParent();
 
@@ -486,6 +489,12 @@ public class SnackBarItem {
     }
 
     public static interface SnackBarDisposeListner {
+        /**
+         * Called when the SnackBar has finished
+         *
+         * @param activity The activity tied to the SnackBar
+         * @param snackBar The SnackBarItem that has finished
+         */
         void onDispose(Activity activity, SnackBarItem snackBar);
     }
 }

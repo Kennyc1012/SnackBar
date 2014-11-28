@@ -196,8 +196,7 @@ public class SnackBar {
     }
 
     private static class SnackBarManager implements SnackBarItem.SnackBarDisposeListner {
-        private final ConcurrentHashMap<Activity, ConcurrentLinkedQueue<SnackBarItem>> mQueue =
-                new ConcurrentHashMap<Activity, ConcurrentLinkedQueue<SnackBarItem>>();
+        private final ConcurrentHashMap<Activity, ConcurrentLinkedQueue<SnackBarItem>> mQueue = new ConcurrentHashMap<>();
 
         private static SnackBarManager mManager;
 
@@ -239,7 +238,7 @@ public class SnackBar {
             ConcurrentLinkedQueue<SnackBarItem> list = mQueue.get(activity);
 
             if (list == null) {
-                list = new ConcurrentLinkedQueue<SnackBarItem>();
+                list = new ConcurrentLinkedQueue<>();
                 mQueue.put(activity, list);
             }
 

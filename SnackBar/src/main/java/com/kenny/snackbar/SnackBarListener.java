@@ -16,9 +16,24 @@ package com.kenny.snackbar;
  * limitations under the License.
  */
 public interface SnackBarListener {
+    /**
+     * Callback for when the SnackBar has started its animation
+     *
+     * @param object Optional object
+     */
     void onSnackBarStarted(Object object);
 
+    /**
+     * Callback for when the action button is selected
+     *
+     * @param object Optional object
+     */
     void onSnackBarAction(Object object);
 
+    /**
+     * Callback for when the SnackBar finishes its animation
+     *
+     * @param object Optional object
+     */
     void onSnackBarFinished(Object object);
 }

@@ -64,6 +64,8 @@ public class SnackBarItem {
     // the action button is selected so it removes immediately.
     private boolean mShouldDisposeOnCancel = true;
 
+    private boolean mIsDisposed = false;
+
     private Activity mActivity;
 
     // Callback for the SnackBarManager
@@ -196,6 +198,8 @@ public class SnackBarItem {
         mSnackBarView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
+                if (mIsDisposed) return false;
+
                 float y = event.getY();
 
                 switch (event.getAction()) {
@@ -207,6 +211,7 @@ public class SnackBarItem {
                             mShouldDisposeOnCancel = false;
                             mAnimator.cancel();
                             ObjectAnimator anim = ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 0.0f).setDuration(view.getResources().getInteger(R.integer.snackbar_disappear_animation_length));
+
                             anim.addListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationCancel(Animator animation) {
@@ -224,11 +229,8 @@ public class SnackBarItem {
                                     }
                                 }
                             });
-                            anim.start();
 
-                            if (mSnackBarListener != null) {
-                                mSnackBarListener.onSnackBarFinished(mObject);
-                            }
+                            anim.start();
                         }
                 }
 
@@ -318,6 +320,8 @@ public class SnackBarItem {
      * Cleans up the Snack Bar when finished
      */
     private void dispose() {
+        mIsDisposed = true;
+
         if (mSnackBarView != null) {
             FrameLayout parent = (FrameLayout) mSnackBarView.getParent();
 
@@ -475,6 +479,12 @@ public class SnackBarItem {
     }
 
     public static interface SnackBarDisposeListner {
+        /**
+         * Called when the SnackBar has finished
+         *
+         * @param activity The activity tied to the SnackBar
+         * @param snackBar The SnackBarItem that has finished
+         */
         void onDispose(Activity activity, SnackBarItem snackBar);
     }
 }
