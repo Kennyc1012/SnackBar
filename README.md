@@ -24,10 +24,10 @@ SnackBar.show(getActivity(), R.string.hello_world);
 ```
 ### Or if you want to set an action
 ```java
-SnackBar.show(getActivity(), R.string.hello_world, R.string.undo,onClickListener);
+SnackBar.show(getActivity(), R.string.hello_world, R.string.undo, onClickListener);
 ```
 #Customization
-### SnackBars can be customizedby creating a SnackBarItem with the Builder factory
+### SnackBars can be customized by creating a SnackBarItem with the Builder factory
 ```java
 SnackBarItem sbi = new SnackBarItem.Builder()
 .setMessage("Message")
