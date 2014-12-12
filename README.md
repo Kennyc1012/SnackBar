@@ -81,9 +81,9 @@ repositories {
 
 dependencies {
     // For api11+
-    compile 'com.github.kennyc1012:snackbar:1.0.2-SNAPSHOT:api11Release@aar'
+    compile 'com.github.kennyc1012:snackbar:1.0.3-SNAPSHOT:api11Release@aar'
     // For api8+
-    compile 'com.github.kennyc1012:snackbar:1.0.2-SNAPSHOT:api8Release@aar'
+    compile 'com.github.kennyc1012:snackbar:1.0.3-SNAPSHOT:api8Release@aar'
 }
 ```
 

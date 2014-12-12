@@ -9,7 +9,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorRes;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -73,7 +72,7 @@ public class SnackBarItem {
 
     private SnackBarListener mSnackBarListener;
 
-    private long mAnimationDuration = DateUtils.SECOND_IN_MILLIS * 3;
+    private long mAnimationDuration = -1;
 
     private Interpolator mInterpolator = new AccelerateDecelerateInterpolator();
 
@@ -150,6 +149,7 @@ public class SnackBarItem {
         parent.addView(mSnackBarView);
         Animator appear = setupAppearAnimation(mActivity.getResources(), mSnackBarView);
         appear.setTarget(mSnackBarView);
+        if (mAnimationDuration <= 0) mAnimationDuration = activity.getResources().getInteger(R.integer.snackbar_duration_length);
 
         mAnimator.playSequentially(
                 appear,
@@ -435,7 +435,7 @@ public class SnackBarItem {
         }
 
         /**
-         * Sets the duration of the SnackBar
+         * Sets the duration of the SnackBar in milliseconds
          *
          * @param duration
          * @return

@@ -7,10 +7,9 @@ android {
     publishNonDefault true
 
     defaultConfig {
-        applicationId "com.kenny.snackbar"
         targetSdkVersion 21
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "1.0.3"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -30,7 +29,7 @@ android {
 
 dependencies {
     compile 'com.android.support:support-annotations:+'
-    api8Compile files('libs/nineoldandroids-2.4.0.jar')
+    api8Compile('com.nineoldandroids:library:2.4.0')
 }
 
-//apply from: 'maven_push.gradle'
+apply from: 'maven_push.gradle'

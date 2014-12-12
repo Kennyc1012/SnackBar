@@ -3,5 +3,5 @@
 
     <integer name="snackbar_appear_animation_length">100</integer>
     <integer name="snackbar_disappear_animation_length">250</integer>
-
+    <integer name="snackbar_duration_length">3000</integer>
 </resources>
