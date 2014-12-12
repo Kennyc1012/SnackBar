@@ -32,4 +32,4 @@ dependencies {
     api8Compile('com.nineoldandroids:library:2.4.0')
 }
 
-apply from: 'maven_push.gradle'
+//apply from: 'maven_push.gradle'
