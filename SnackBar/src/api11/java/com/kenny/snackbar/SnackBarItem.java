@@ -6,12 +6,15 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -147,7 +150,7 @@ public class SnackBarItem {
         mAnimator = new AnimatorSet();
         mAnimator.setInterpolator(mInterpolator);
         parent.addView(mSnackBarView);
-        Animator appear = AnimatorInflater.loadAnimator(activity, R.animator.appear);
+        Animator appear = getAppearAnimation(activity);
         appear.setTarget(mSnackBarView);
         if (mAnimationDuration <= 0) mAnimationDuration = activity.getResources().getInteger(R.integer.snackbar_duration_length);
 
@@ -284,6 +287,44 @@ public class SnackBarItem {
                 }
             }
         });
+    }
+
+    /**
+     * Returns the animator for the appear animation
+     *
+     * @param context
+     * @return
+     */
+    private Animator getAppearAnimation(Context context) {
+        // Only Kit-Kit+ devices can have a translucent style
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Resources res = context.getResources();
+            int[] attrs = new int[]{android.R.attr.windowTranslucentNavigation};
+            TypedArray a = context.getTheme().obtainStyledAttributes(attrs);
+            boolean isTranslucent = a.getBoolean(0, false);
+            a.recycle();
+
+            if (isTranslucent) {
+                boolean isLandscape = res.getBoolean(R.bool.sb_isLandscape);
+                boolean isTablet = res.getBoolean(R.bool.sb_isTablet);
+
+                // Translucent nav bars will appear on anything that isn't landscape, as well as tablets in landscape
+                if (!isLandscape || (isLandscape && isTablet)) {
+                    int resourceId = res.getIdentifier("navigation_bar_height", "dimen", "android");
+                    float animationFrom = res.getDimension(R.dimen.snack_bar_height);
+                    float animationTo = res.getDimension(R.dimen.snack_bar_animation_position);
+                    if (resourceId > 0) animationTo -= res.getDimensionPixelSize(resourceId);
+
+                    AnimatorSet set = new AnimatorSet();
+                    set.playTogether(
+                            ObjectAnimator.ofFloat(mSnackBarView, "translationY", animationFrom, animationTo),
+                            ObjectAnimator.ofFloat(mSnackBarView, "alpha", 0.0f, 1.0f));
+                    return set;
+                }
+            }
+        }
+
+        return AnimatorInflater.loadAnimator(context, R.animator.appear);
     }
 
     /**
