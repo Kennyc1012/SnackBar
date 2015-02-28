@@ -1,26 +1,23 @@
 package com.kenny.snackbar;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorRes;
+import android.support.annotation.IdRes;
+import android.support.annotation.InterpolatorRes;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.AnimatorListenerAdapter;
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
 
 /*
  * Copyright (C) 2014 Kenny Campagna
@@ -37,30 +34,41 @@ import com.nineoldandroids.animation.ObjectAnimator;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class SnackBarItem {
+public class SnackBarItem implements SnackBarAnimCompat.SnackBarAnimationListener {
+    private static final int[] ATTR = new int[]
+            {
+                    R.attr.snack_bar_background_color,
+                    R.attr.snack_bar_duration,
+                    R.attr.snack_bar_interpolator,
+                    R.attr.snack_bar_text_action_color,
+                    R.attr.snack_bar_text_action_pressed_color,
+                    R.attr.snack_bar_text_color
+            };
+
     private View.OnClickListener mActionClickListener;
 
     private View mSnackBarView;
 
-    private AnimatorSet mAnimator;
+    // The animation set used for animation. Set as an object for compatibility
+    private Object mAnimator;
 
     private String mMessageString;
 
     private String mActionMessage;
 
     // The color of the background
-    private int mSnackBarColor = R.color.snack_bar_bg;
+    private int mSnackBarColor = -1;
 
-    private int mMessageColor = Color.WHITE;
+    private int mMessageColor = -1;
 
     // The default color the action item will be
-    private int mDefaultActionColor = Color.YELLOW;
+    private int mDefaultActionColor = -1;
 
     // The pressed color of the action item
-    private int mPressedActionColor = Color.WHITE;
+    private int mPressedActionColor = -1;
 
-    // Flag for if when the animation is canceled, should the item be disposed of. Will be set to false when
-    // the action button is selected so it removes immediately.
+    /* Flag for when the animation is canceled, should the item be disposed of. Will be set to false when
+     the action button is selected so it removes immediately.*/
     private boolean mShouldDisposeOnCancel = true;
 
     private boolean mIsDisposed = false;
@@ -74,7 +82,8 @@ public class SnackBarItem {
 
     private long mAnimationDuration = -1;
 
-    private Interpolator mInterpolator = new AccelerateDecelerateInterpolator();
+    @InterpolatorRes
+    private int mInterpolatorId = -1;
 
     private Object mObject;
 
@@ -121,16 +130,16 @@ public class SnackBarItem {
         mListener = listener;
         FrameLayout parent = (FrameLayout) activity.findViewById(android.R.id.content);
         mSnackBarView = activity.getLayoutInflater().inflate(R.layout.snack_bar, parent, false);
+        getAttributes(mActivity);
 
-        if (mSnackBarColor != R.color.snack_bar_bg) {
-            Drawable bg = mSnackBarView.getBackground();
+        // Setting up the background
+        Drawable bg = mSnackBarView.getBackground();
 
-            // Tablet SnackBars have a shape drawable as a background
-            if (bg instanceof GradientDrawable) {
-                ((GradientDrawable) bg).setColor(mSnackBarColor);
-            } else {
-                mSnackBarView.setBackgroundColor(mSnackBarColor);
-            }
+        // Tablet SnackBars have a shape drawable as a background
+        if (bg instanceof GradientDrawable) {
+            ((GradientDrawable) bg).setColor(mSnackBarColor);
+        } else {
+            mSnackBarView.setBackgroundColor(mSnackBarColor);
         }
 
         setupGestureDetector();
@@ -144,61 +153,10 @@ public class SnackBarItem {
             setupActionButton((ImageView) mSnackBarView.findViewById(R.id.action));
         }
 
-        mAnimator = new AnimatorSet();
-        mAnimator.setInterpolator(mInterpolator);
-        parent.addView(mSnackBarView);
-        Animator appear = setupAppearAnimation(mActivity.getResources(), mSnackBarView);
-        appear.setTarget(mSnackBarView);
         if (mAnimationDuration <= 0) mAnimationDuration = activity.getResources().getInteger(R.integer.snackbar_duration_length);
-
-        mAnimator.playSequentially(
-                appear,
-                ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 1.0f).setDuration(mAnimationDuration),
-                ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 0.0f).setDuration(mActivity.getResources().getInteger(R.integer.snackbar_disappear_animation_length))
-        );
-
-        mAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-
-                if (mShouldDisposeOnCancel) {
-                    if (mSnackBarListener != null) {
-                        mSnackBarListener.onSnackBarFinished(mObject);
-                    }
-
-                    dispose();
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                super.onAnimationCancel(animation);
-                if (mShouldDisposeOnCancel) dispose();
-            }
-
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-
-                if (mSnackBarListener != null) {
-                    mSnackBarListener.onSnackBarStarted(mObject);
-                }
-            }
-        });
-
-        mAnimator.start();
-    }
-
-    private Animator setupAppearAnimation(Resources resources, View view) {
-        AnimatorSet set = new AnimatorSet().setDuration(resources.getInteger(R.integer.snackbar_appear_animation_length));
-        set.playTogether(
-                ObjectAnimator.ofFloat(view, "alpha", 0.0f, 1.0f),
-                ObjectAnimator.ofFloat(view, "translationY", resources.getDimension(R.dimen.snack_bar_height),
-                        resources.getDimension(R.dimen.snack_bar_animation_position))
-        );
-
-        return set;
+        if (mInterpolatorId == -1) mInterpolatorId = android.R.anim.accelerate_decelerate_interpolator;
+        parent.addView(mSnackBarView);
+        mAnimator = SnackBarAnimCompat.show(mActivity, mSnackBarView, this, mInterpolatorId, mAnimationDuration);
     }
 
     /**
@@ -220,27 +178,8 @@ public class SnackBarItem {
 
                         if (y > mPreviousY && y - mPreviousY >= 50) {
                             mShouldDisposeOnCancel = false;
-                            mAnimator.cancel();
-                            ObjectAnimator anim = ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 0.0f).setDuration(view.getResources().getInteger(R.integer.snackbar_disappear_animation_length));
-                            anim.addListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                    super.onAnimationCancel(animation);
-                                    dispose();
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    dispose();
-
-                                    if (mSnackBarListener != null) {
-                                        mSnackBarListener.onSnackBarFinished(mObject);
-                                    }
-                                }
-                            });
-
-                            anim.start();
+                            SnackBarAnimCompat.cancelAnimationSet(mAnimator);
+                            SnackBarAnimCompat.hide(mSnackBarView, SnackBarItem.this);
                         }
                 }
 
@@ -263,27 +202,9 @@ public class SnackBarItem {
             @Override
             public void onClick(View view) {
                 mShouldDisposeOnCancel = false;
-                mAnimator.cancel();
-                ObjectAnimator anim = ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 0.0f).setDuration(view.getResources().getInteger(R.integer.snackbar_disappear_animation_length));
-                anim.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        super.onAnimationCancel(animation);
-                        dispose();
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-
-                        if (mSnackBarListener != null) {
-                            mSnackBarListener.onSnackBarFinished(mObject);
-                        }
-
-                        dispose();
-                    }
-                });
-                anim.start();
+                mShouldDisposeOnCancel = false;
+                SnackBarAnimCompat.cancelAnimationSet(mAnimator);
+                SnackBarAnimCompat.hide(mSnackBarView, SnackBarItem.this);
 
                 if (mActionClickListener != null) {
                     mActionClickListener.onClick(view);
@@ -316,13 +237,28 @@ public class SnackBarItem {
     }
 
     /**
+     * Gets the attributes to be used for the SnackBar from the context style
+     *
+     * @param context
+     */
+    private void getAttributes(Context context) {
+        TypedArray a = context.obtainStyledAttributes(ATTR);
+        Resources res = context.getResources();
+
+        if (mSnackBarColor == -1) mSnackBarColor = a.getColor(0, res.getColor(R.color.snack_bar_bg));
+        if (mAnimationDuration == -1) mAnimationDuration = a.getInt(1, 3000);
+        if (mInterpolatorId == -1) mInterpolatorId = a.getResourceId(2, android.R.anim.accelerate_decelerate_interpolator);
+        if (mDefaultActionColor == -1) mDefaultActionColor = a.getColor(3, res.getColor(R.color.snack_bar_action_default));
+        if (mPressedActionColor == -1) mPressedActionColor = a.getColor(4, Color.WHITE);
+        if (mMessageColor == -1) mMessageColor = a.getColor(5, Color.WHITE);
+        a.recycle();
+    }
+
+    /**
      * Cancels the Snack Bar from being displayed
      */
     public void cancel() {
-        if (mAnimator != null) {
-            mAnimator.cancel();
-        }
-
+        SnackBarAnimCompat.cancelAnimationSet(mAnimator);
         dispose();
     }
 
@@ -341,7 +277,6 @@ public class SnackBarItem {
         }
 
         if (mAnimator != null) {
-            mAnimator.removeAllListeners();
             mAnimator = null;
         }
 
@@ -451,8 +386,8 @@ public class SnackBarItem {
          * @param interpolator
          * @return
          */
-        public Builder setInterpolator(Interpolator interpolator) {
-            mSnackBarItem.mInterpolator = interpolator;
+        public Builder setInterpolator(@IdRes int interpolator) {
+            mSnackBarItem.mInterpolatorId = interpolator;
             return this;
         }
 
@@ -488,6 +423,43 @@ public class SnackBarItem {
         }
     }
 
+    @Override
+    public void onAnimationStart() {
+        if (mSnackBarListener != null) {
+            mSnackBarListener.onSnackBarStarted(mObject);
+        }
+    }
+
+    @Override
+    public void onAnimationCanceled() {
+        if (mShouldDisposeOnCancel) dispose();
+    }
+
+    @Override
+    public void onAnimationEnd() {
+        if (mShouldDisposeOnCancel) {
+            if (mSnackBarListener != null) {
+                mSnackBarListener.onSnackBarFinished(mObject);
+            }
+
+            dispose();
+        }
+    }
+
+    @Override
+    public void onActionAnimationCanceled() {
+        dispose();
+    }
+
+    @Override
+    public void onActionAnimationEnd() {
+        if (mSnackBarListener != null) {
+            mSnackBarListener.onSnackBarFinished(mObject);
+        }
+
+        dispose();
+    }
+
     public static interface SnackBarDisposeListner {
         /**
          * Called when the SnackBar has finished
@@ -497,4 +469,5 @@ public class SnackBarItem {
          */
         void onDispose(Activity activity, SnackBarItem snackBar);
     }
+
 }

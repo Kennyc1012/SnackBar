@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="snack_bar_background_color" format="color" />
+    <attr name="snack_bar_text_color" format="color" />
+    <attr name="snack_bar_text_action_color" format="color" />
+    <attr name="snack_bar_text_action_pressed_color" format="color" />
+    <attr name="snack_bar_duration" format="integer" />
+    <attr name="snack_bar_interpolator" format="reference" />
+
+</resources>

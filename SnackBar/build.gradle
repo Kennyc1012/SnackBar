@@ -8,8 +8,8 @@ android {
 
     defaultConfig {
         targetSdkVersion 21
-        versionCode 5
-        versionName "1.0.4"
+        versionCode 6
+        versionName "1.1"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -32,4 +32,4 @@ dependencies {
     api8Compile('com.nineoldandroids:library:2.4.0')
 }
 
-//apply from: 'maven_push.gradle'
+apply from: 'maven_push.gradle'

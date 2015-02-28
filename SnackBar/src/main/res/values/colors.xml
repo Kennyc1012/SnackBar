@@ -2,5 +2,6 @@
 <resources>
 
     <color name="snack_bar_bg">#323232</color>
+    <color name="snack_bar_action_default">#FFEB3B</color>
 
 </resources>
