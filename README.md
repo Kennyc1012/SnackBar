@@ -111,7 +111,7 @@ dependencies {
     compile 'com.github.kennyc1012:snackbar:1.1-SNAPSHOT:api11Release@aar'
     // For api8+ you also need to comple NineOldAndroids
     compile 'com.github.kennyc1012:snackbar:1.1-SNAPSHOT:api8Release@aar'
-    compile('com.nineoldandroids:library:2.4.0')
+    compile 'com.nineoldandroids:library:2.4.0'
 }
 ```
 
