@@ -15,6 +15,7 @@ SnackBar
 - Swipe to dismiss
 - Callbacks for the different SnackBar states (started, actionClicked, finished)
 - One Message at a time
+- XML Style support
 - Support for Api version 8+
 
 
@@ -46,6 +47,31 @@ SnackBarItem sbi = new SnackBarItem.Builder()
 
 SnackBar.show(getActivity(),sbi);
 ```
+
+###SnackBars can also be styled via the application theme
+The following attributes can be used for styling a SnackBar
+```xml
+   <attr name="snack_bar_background_color" format="color" />
+   <attr name="snack_bar_text_color" format="color" />
+   <attr name="snack_bar_text_action_color" format="color" />
+   <attr name="snack_bar_text_action_pressed_color" format="color" />
+   <attr name="snack_bar_duration" format="integer" />
+   <attr name="snack_bar_interpolator" format="reference" />
+   ...
+   ...
+   ...
+   ...
+   <style name="MyTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/background_material_light</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="snack_bar_text_color">@color/my_color</item>
+        <item name="snack_bar_duration">5000</item>
+    </style>
+```
+
+
 ### Receive callbacks from SnackBars with an Object
 ```java
 // Called when the SnackBar begins to animate
@@ -82,9 +108,9 @@ repositories {
 
 dependencies {
     // For api11+
-    compile 'com.github.kennyc1012:snackbar:1.0.4-SNAPSHOT:api11Release@aar'
+    compile 'com.github.kennyc1012:snackbar:1.1-SNAPSHOT:api11Release@aar'
     // For api8+
-    compile 'com.github.kennyc1012:snackbar:1.0.4-SNAPSHOT:api8Release@aar'
+    compile 'com.github.kennyc1012:snackbar:1.1-SNAPSHOT:api8Release@aar'
 }
 ```
 
