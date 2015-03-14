@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorRes;
-import android.support.annotation.IdRes;
 import android.support.annotation.InterpolatorRes;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -76,7 +75,7 @@ public class SnackBarItem implements SnackBarAnimCompat.SnackBarAnimationListene
     private Activity mActivity;
 
     // Callback for the SnackBarManager
-    private SnackBarDisposeListner mListener;
+    private SnackBarDisposeListener mListener;
 
     private SnackBarListener mSnackBarListener;
 
@@ -121,7 +120,7 @@ public class SnackBarItem implements SnackBarAnimCompat.SnackBarAnimationListene
      * @param activity
      * @param listener
      */
-    public void show(Activity activity, SnackBarDisposeListner listener) {
+    public void show(Activity activity, SnackBarDisposeListener listener) {
         if (TextUtils.isEmpty(mMessageString)) {
             throw new IllegalArgumentException("No message has been set for the Snack Bar");
         }
@@ -386,7 +385,7 @@ public class SnackBarItem implements SnackBarAnimCompat.SnackBarAnimationListene
          * @param interpolator
          * @return
          */
-        public Builder setInterpolator(@IdRes int interpolator) {
+        public Builder setInterpolator(@InterpolatorRes int interpolator) {
             mSnackBarItem.mInterpolatorId = interpolator;
             return this;
         }
@@ -460,7 +459,7 @@ public class SnackBarItem implements SnackBarAnimCompat.SnackBarAnimationListene
         dispose();
     }
 
-    public static interface SnackBarDisposeListner {
+    public static interface SnackBarDisposeListener {
         /**
          * Called when the SnackBar has finished
          *

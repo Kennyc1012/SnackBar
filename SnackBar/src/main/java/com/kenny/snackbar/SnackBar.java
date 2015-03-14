@@ -195,7 +195,7 @@ public class SnackBar {
         SnackBarManager.getInstance().cancelSnackBars(activity);
     }
 
-    private static class SnackBarManager implements SnackBarItem.SnackBarDisposeListner {
+    private static class SnackBarManager implements SnackBarItem.SnackBarDisposeListener {
         private final ConcurrentHashMap<Activity, ConcurrentLinkedQueue<SnackBarItem>> mQueue = new ConcurrentHashMap<>();
 
         private static SnackBarManager mManager;
