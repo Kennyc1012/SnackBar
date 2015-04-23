@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.annotation.ColorRes;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.InterpolatorRes;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
@@ -90,28 +91,6 @@ public class SnackBarItem {
     private Object mObject;
 
     private float mPreviousY;
-
-    /**
-     * Create a SnackBarItem
-     *
-     * @param message The message for the SnackBarItem
-     */
-    SnackBarItem(String message) {
-        mMessageString = message;
-    }
-
-    /**
-     * Create a SnackbarItem
-     *
-     * @param message         The message for the SnackBarItem
-     * @param actionMessage   The action message for the SnackBarItem
-     * @param onClickListener THe onClickListener for the action
-     */
-    SnackBarItem(String message, String actionMessage, View.OnClickListener onClickListener) {
-        mMessageString = message;
-        mActionMessage = actionMessage.toUpperCase();
-        mActionClickListener = onClickListener;
-    }
 
     private SnackBarItem(Activity activty) {
         mActivity = activty;
@@ -405,7 +384,7 @@ public class SnackBarItem {
          * @param message
          * @return
          */
-        public Builder setMessage(@StringRes int message) {
+        public Builder setMessageResource(@StringRes int message) {
             mSnackBarItem.mMessageString = mSnackBarItem.mActivity.getString(message);
             return this;
         }
@@ -430,7 +409,7 @@ public class SnackBarItem {
          * @param actionMessage
          * @return
          */
-        public Builder setActionMessage(@StringRes int actionMessage) {
+        public Builder setActionMessageResource(@StringRes int actionMessage) {
             mSnackBarItem.mActionMessage = mSnackBarItem.mActivity.getString(actionMessage);
             return this;
         }
@@ -452,18 +431,63 @@ public class SnackBarItem {
          * @param color
          * @return
          */
-        public Builder setActionMessageColor(@ColorRes int color) {
+        public Builder setActionMessageColor(int color) {
             mSnackBarItem.mDefaultActionColor = color;
             return this;
         }
 
-        public Builder setSnackBarBackgroundColor(@ColorRes int color) {
+        /**
+         * Sets the default color of the action message
+         *
+         * @param color
+         * @return
+         */
+        public Builder setActionMessageColorResource(@ColorRes int color) {
+            mSnackBarItem.mDefaultActionColor = mSnackBarItem.mActivity.getResources().getColor(color);
+            return this;
+        }
+
+        /**
+         * Sets the background color of the SnackBar
+         *
+         * @param color
+         * @return
+         */
+        public Builder setSnackBarBackgroundColor(int color) {
             mSnackBarItem.mSnackBarColor = color;
             return this;
         }
 
-        public Builder setSnackBarMessageColor(@ColorRes int color) {
+        /**
+         * Sets the background color of the SnackBar
+         *
+         * @param color
+         * @return
+         */
+        public Builder setSnackBarBackgroundColorResource(@ColorRes int color) {
+            mSnackBarItem.mSnackBarColor = mSnackBarItem.mActivity.getResources().getColor(color);
+            return this;
+        }
+
+        /**
+         * Sets the color of the message of the SnackBar
+         *
+         * @param color
+         * @return
+         */
+        public Builder setSnackBarMessageColor(int color) {
             mSnackBarItem.mMessageColor = color;
+            return this;
+        }
+
+        /**
+         * Sets the color of the message of the SnackBar
+         *
+         * @param color
+         * @return
+         */
+        public Builder setSnackBarMessageColorResource(@ColorRes int color) {
+            mSnackBarItem.mMessageColor = mSnackBarItem.mActivity.getResources().getColor(color);
             return this;
         }
 
@@ -479,12 +503,23 @@ public class SnackBarItem {
         }
 
         /**
+         * Sets the duration of the SnackBar in milliseconds
+         *
+         * @param duration
+         * @return
+         */
+        public Builder setDurationResource(@IntegerRes int duration) {
+            mSnackBarItem.mAnimationDuration = mSnackBarItem.mActivity.getResources().getInteger(duration);
+            return this;
+        }
+
+        /**
          * Set the Interpolator of the SnackBar animation
          *
          * @param interpolator
          * @return
          */
-        public Builder setInterpolator(@InterpolatorRes int interpolator) {
+        public Builder setInterpolatorResource(@InterpolatorRes int interpolator) {
             mSnackBarItem.mInterpolatorId = interpolator;
             return this;
         }

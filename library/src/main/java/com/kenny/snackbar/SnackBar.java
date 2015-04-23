@@ -30,7 +30,10 @@ public class SnackBar {
      * @param message  The Sting Resource of the message to show
      */
     public static void show(Activity activity, @StringRes int message) {
-        SnackBarItem sbi = new SnackBarItem(activity.getString(message));
+        SnackBarItem sbi = new SnackBarItem.Builder(activity)
+                .setMessageResource(message)
+                .build();
+
         SnackBarManager mngr = SnackBarManager.getInstance();
         mngr.addSnackBar(activity, sbi);
 
@@ -48,7 +51,12 @@ public class SnackBar {
      * @param onClickListener The onclick listener for the action button
      */
     public static void show(Activity activity, @StringRes int message, @StringRes int actionMessage, View.OnClickListener onClickListener) {
-        SnackBarItem sbi = new SnackBarItem(activity.getString(message), activity.getString(actionMessage), onClickListener);
+        SnackBarItem sbi = new SnackBarItem.Builder(activity)
+                .setMessageResource(message)
+                .setActionMessageResource(actionMessage)
+                .setActionClickListener(onClickListener)
+                .build();
+
         SnackBarManager mngr = SnackBarManager.getInstance();
         mngr.addSnackBar(activity, sbi);
 
@@ -64,7 +72,10 @@ public class SnackBar {
      * @param message  The  message to show
      */
     public static void show(Activity activity, String message) {
-        SnackBarItem sbi = new SnackBarItem(message);
+        SnackBarItem sbi = new SnackBarItem.Builder(activity)
+                .setMessage(message)
+                .build();
+
         SnackBarManager mngr = SnackBarManager.getInstance();
         mngr.addSnackBar(activity, sbi);
 
@@ -82,7 +93,12 @@ public class SnackBar {
      * @param onClickListener The onclick listener for the action button
      */
     public static void show(Activity activity, String message, String actionMessage, View.OnClickListener onClickListener) {
-        SnackBarItem sbi = new SnackBarItem(message, actionMessage, onClickListener);
+        SnackBarItem sbi = new SnackBarItem.Builder(activity)
+                .setMessage(message)
+                .setActionMessage(actionMessage)
+                .setActionClickListener(onClickListener)
+                .build();
+
         SnackBarManager mngr = SnackBarManager.getInstance();
         mngr.addSnackBar(activity, sbi);
 
