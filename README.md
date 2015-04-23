@@ -29,15 +29,14 @@ SnackBar.show(getActivity(), R.string.hello_world, R.string.undo, onClickListene
 ### SnackBars can be customized by creating a SnackBarItem with the Builder factory
 ```java
 SnackBarItem sbi = new SnackBarItem.Builder(getActivity())
-.setMessage(R.string.message)
-.setActionMessage(R.string.action)
+.setMessageResource(R.string.message)
+.setActionMessageResource(R.string.action)
 .setObject(myObject)
 .setActionClickListener(myClickListener)
-.setActionMessageColor(getResources().getColor(R.color.my_red))
-.setActionMessagePressedColor(getResources().getColor(R.color.my_blue))
-.setSnackBarMessageColor(getResources().getColor(R.color.my_yellow))
-.setSnackBarBackgroundColor(getResources().getColor(R.color.my_green)
-.setInterpolator(new OvershootInterpolator())
+.setActionMessageColorResource(R.color.my_red)
+.setSnackBarMessageColorResource(R.color.my_yellow)
+.setSnackBarBackgroundColorResource(R.color.my_green)
+.setInterpolatorResource(android.R.interpolator.accelerate_decelerate)
 .setDuration(5000)
 .setSnackBarListener(myListener)
 .show();
@@ -93,6 +92,14 @@ SnackBar.cancelSnackBars(getActivity());
 
 #Migrating from 1.X 
 Version 2.X has brought many changes. 
+
+First, support for pre HoneyComb has been dropped. Version 1.1 is still available, but no more work will be devoted to anything pre SDK 11. 
+
+Second, the snack_bar_text_action_color_pressed attribute has been removed. The action on the SnackBar is now a native button, so it will used the built in selector for the pressed states.
+
+Lastly, the SnackBarItem.Builder class now takes an activity in the constructor to allow the passing of resource ids into the builder methods. 
+
+
 #Including in your project
 To include SnackBar in your project, add the following to your build.gradle file.
 ```groovy
