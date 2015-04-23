@@ -1,13 +1,11 @@
 SnackBar
 ========
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Kennyc1012%2FSnackBar-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/997)
-[![API](https://img.shields.io/badge/API-8%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=8)
+[![API](https://img.shields.io/badge/API-11%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=11)
 
 #Designed after the docs at [Google Material Design](http://www.google.com/design/spec/components/snackbars-and-toasts.html)
 
-![phone](https://github.com/Kennyc1012/SnackBar/raw/master/phone.gif)
-
-![tablet](https://github.com/Kennyc1012/SnackBar/raw/master/tablet.gif)
+![screenshot](https://github.com/Kennyc1012/SnackBar/blob/master/art/phone.gif)
 
 #Features
 - Customization including message, action message, action color, message color, background color, action click handle, animation duration, and animation interpolator  
@@ -16,7 +14,6 @@ SnackBar
 - Callbacks for the different SnackBar states (started, actionClicked, finished)
 - One Message at a time
 - XML Style support
-- Support for Api version 8+
 
 
 #Using SnackBar
@@ -31,9 +28,9 @@ SnackBar.show(getActivity(), R.string.hello_world, R.string.undo, onClickListene
 #Customization
 ### SnackBars can be customized by creating a SnackBarItem with the Builder factory
 ```java
-SnackBarItem sbi = new SnackBarItem.Builder()
-.setMessage("Message")
-.setActionMessage("Action")
+SnackBarItem sbi = new SnackBarItem.Builder(getActivity())
+.setMessage(R.string.message)
+.setActionMessage(R.string.action)
 .setObject(myObject)
 .setActionClickListener(myClickListener)
 .setActionMessageColor(getResources().getColor(R.color.my_red))
@@ -43,9 +40,7 @@ SnackBarItem sbi = new SnackBarItem.Builder()
 .setInterpolator(new OvershootInterpolator())
 .setDuration(5000)
 .setSnackBarListener(myListener)
-.build();
-
-SnackBar.show(getActivity(),sbi);
+.show();
 ```
 
 ###SnackBars can also be styled via the application theme
@@ -54,7 +49,6 @@ The following attributes can be used for styling a SnackBar
    <attr name="snack_bar_background_color" format="color" />
    <attr name="snack_bar_text_color" format="color" />
    <attr name="snack_bar_text_action_color" format="color" />
-   <attr name="snack_bar_text_action_pressed_color" format="color" />
    <attr name="snack_bar_duration" format="integer" />
    <attr name="snack_bar_interpolator" format="reference" />
    ...
@@ -97,18 +91,29 @@ public void onSnackBarFinished(Object object){
 SnackBar.cancelSnackBars(getActivity());
 ```
 
+#Migrating from 1.X 
+Version 2.X has brought many changes. 
 #Including in your project
 To include SnackBar in your project, add the following to your build.gradle file.
 ```groovy
 repositories {
-   maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-    mavenCentral()
+   maven { url 'https://dl.bintray.com/kennyc1012/maven' }
 }
 
 
 dependencies {
-    // For api11+
-    compile 'com.github.kennyc1012:snackbar:1.1-SNAPSHOT:api11Release@aar'
+    compile 'com.kennyc:snackbar:2.0'
+}
+```
+
+If you need support for pre HoneyComb, you can still use the 1.1 release, but all support has been dropped for it
+```groovy
+repositories {
+   maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+
+dependencies {
     // For api8+ you also need to comple NineOldAndroids
     compile 'com.github.kennyc1012:snackbar:1.1-SNAPSHOT:api8Release@aar'
     compile 'com.nineoldandroids:library:2.4.0'
