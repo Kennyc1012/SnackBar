@@ -20,3 +20,16 @@ android {
 dependencies {
     compile 'com.android.support:support-annotations:+'
 }
+
+publish {
+    bintrayUser = project.BINTRAY_USER
+    bintrayKey = project.BINTRAY_API_KEY
+    dryRun = false;
+    groupId = 'com.kennyc'
+    artifactId = 'snackbar'
+    version = '2.0'
+    website = 'https://github.com/Kennyc1012/SnackBar'
+    description = 'SnackBar messages for Android Applications'
+    issueTracker = "${website}/issues"
+    repository = "${website}.git"
+}
