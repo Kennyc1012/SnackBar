@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 11
         targetSdkVersion 22
-        versionCode 7
-        versionName "2.0"
+        versionCode 8
+        versionName project.VERSION_NAME
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -27,7 +27,7 @@ publish {
     dryRun = false;
     groupId = 'com.kennyc'
     artifactId = 'snackbar'
-    version = '2.0'
+    version = project.VERSION_NAME
     website = 'https://github.com/Kennyc1012/SnackBar'
     description = 'SnackBar messages for Android Applications'
     issueTracker = "${website}/issues"
