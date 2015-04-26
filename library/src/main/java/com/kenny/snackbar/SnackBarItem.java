@@ -177,7 +177,7 @@ public class SnackBarItem {
      */
     private void setupActionButton(Button action) {
         action.setVisibility(View.VISIBLE);
-        action.setText(mActionMessage);
+        action.setText(mActionMessage.toUpperCase());
         action.setTextColor(mDefaultActionColor);
 
         action.setOnClickListener(new View.OnClickListener() {
@@ -213,7 +213,7 @@ public class SnackBarItem {
      * Cancels the Snack Bar from being displayed
      */
     public void cancel() {
-        mAnimator.cancel();
+        if (mAnimator != null) mAnimator.cancel();
         dispose();
     }
 
