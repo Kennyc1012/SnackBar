@@ -78,9 +78,6 @@ public class SnackBarItem {
 
     private Activity mActivity;
 
-    // Callback for the SnackBarManager
-    private SnackBarDisposeListener mListener;
-
     private SnackBarListener mSnackBarListener;
 
     private long mAnimationDuration = -1;
@@ -100,15 +97,13 @@ public class SnackBarItem {
      * Shows the Snack Bar. This method is strictly for the SnackBarManager to call.
      *
      * @param activity
-     * @param listener
      */
-    public void show(Activity activity, SnackBarDisposeListener listener) {
+    public void show(Activity activity) {
         if (TextUtils.isEmpty(mMessageString)) {
             throw new IllegalArgumentException("No message has been set for the Snack Bar");
         }
 
         mActivity = activity;
-        mListener = listener;
         FrameLayout parent = (FrameLayout) activity.findViewById(android.R.id.content);
         mSnackBarView = activity.getLayoutInflater().inflate(R.layout.snack_bar, parent, false);
         getAttributes(mActivity);
@@ -134,7 +129,8 @@ public class SnackBarItem {
             setupActionButton((Button) mSnackBarView.findViewById(R.id.action));
         }
 
-        if (mAnimationDuration <= 0) mAnimationDuration = activity.getResources().getInteger(R.integer.snackbar_duration_length);
+        if (mAnimationDuration <= 0)
+            mAnimationDuration = activity.getResources().getInteger(R.integer.snackbar_duration_length);
         if (mInterpolatorId == -1) mInterpolatorId = android.R.interpolator.accelerate_decelerate;
         parent.addView(mSnackBarView);
         createShowAnimation();
@@ -201,10 +197,13 @@ public class SnackBarItem {
         TypedArray a = context.obtainStyledAttributes(ATTR);
         Resources res = context.getResources();
 
-        if (mSnackBarColor == -1) mSnackBarColor = a.getColor(0, res.getColor(R.color.snack_bar_bg));
+        if (mSnackBarColor == -1)
+            mSnackBarColor = a.getColor(0, res.getColor(R.color.snack_bar_bg));
         if (mAnimationDuration == -1) mAnimationDuration = a.getInt(1, 3000);
-        if (mInterpolatorId == -1) mInterpolatorId = a.getResourceId(2, android.R.anim.accelerate_decelerate_interpolator);
-        if (mDefaultActionColor == -1) mDefaultActionColor = a.getColor(3, res.getColor(R.color.snack_bar_action_default));
+        if (mInterpolatorId == -1)
+            mInterpolatorId = a.getResourceId(2, android.R.anim.accelerate_decelerate_interpolator);
+        if (mDefaultActionColor == -1)
+            mDefaultActionColor = a.getColor(3, res.getColor(R.color.snack_bar_action_default));
         if (mMessageColor == -1) mMessageColor = a.getColor(4, Color.WHITE);
         a.recycle();
     }
@@ -225,22 +224,13 @@ public class SnackBarItem {
 
         if (mSnackBarView != null) {
             FrameLayout parent = (FrameLayout) mSnackBarView.getParent();
-
-            if (parent != null) {
-                parent.removeView(mSnackBarView);
-            }
+            if (parent != null) parent.removeView(mSnackBarView);
         }
 
-        if (mAnimator != null) {
-            mAnimator = null;
-        }
-
+        mAnimator = null;
         mSnackBarView = null;
         mActionClickListener = null;
-
-        if (mListener != null) {
-            mListener.onDispose(mActivity, this);
-        }
+        SnackBar.dispose(mActivity, this);
     }
 
     /**
@@ -342,16 +332,6 @@ public class SnackBarItem {
         }
 
         return AnimatorInflater.loadAnimator(mActivity, R.animator.appear);
-    }
-
-    public interface SnackBarDisposeListener {
-        /**
-         * Called when the SnackBar has finished
-         *
-         * @param activity The activity tied to the SnackBar
-         * @param snackBar The SnackBarItem that has finished
-         */
-        void onDispose(Activity activity, SnackBarItem snackBar);
     }
 
     /**

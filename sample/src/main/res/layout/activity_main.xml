@@ -21,4 +21,11 @@
         android:layout_width="wrap_content"
         android:text="Toggle SnackBar With Action" />
 
+    <Button
+        android:id="@+id/sb_cancel"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Cancel All SnackBars" />
+
+
 </LinearLayout>

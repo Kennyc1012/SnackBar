@@ -20,10 +20,12 @@ public class MainActivity extends AppCompatActivity implements SnackBarListener,
         setContentView(R.layout.activity_main);
         findViewById(R.id.sb_action_toggle).setOnClickListener(this);
         findViewById(R.id.sb_toggle).setOnClickListener(this);
+        findViewById(R.id.sb_cancel).setOnClickListener(this);
     }
 
     @Override
     protected void onPause() {
+        SnackBar.cancelSnackBars(this);
         super.onPause();
     }
 
@@ -41,6 +43,10 @@ public class MainActivity extends AppCompatActivity implements SnackBarListener,
             case R.id.sb_action_toggle:
                 SnackBar.show(MainActivity.this, "This is a SnackBar with an action", "COOL", (SnackBarListener) MainActivity.this);
                 break;
+
+            case R.id.sb_cancel:
+                SnackBar.cancelSnackBars(this);
+                break;
         }
     }
 
@@ -56,6 +62,6 @@ public class MainActivity extends AppCompatActivity implements SnackBarListener,
 
     @Override
     public void onSnackBarFinished(Object object) {
-        Log.v(TAG, "SnackBar Finished Pressed with object " + object);
+        Log.v(TAG, "SnackBar Finished with object " + object);
     }
 }

@@ -117,7 +117,8 @@ public class SnackBar {
     public static void show(Activity activity, @StringRes int message, SnackBarListener listener) {
         SnackBarItem sbi = new SnackBarItem.Builder(activity)
                 .setMessage(activity.getString(message))
-                .setSnackBarListener(listener).build();
+                .setSnackBarListener(listener)
+                .build();
 
         SnackBarManager mngr = SnackBarManager.getInstance();
         mngr.addSnackBar(activity, sbi);
@@ -138,7 +139,9 @@ public class SnackBar {
     public static void show(Activity activity, @StringRes int message, @StringRes int actionMessage, SnackBarListener listener) {
         SnackBarItem sbi = new SnackBarItem.Builder(activity)
                 .setMessage(activity.getString(message))
-                .setActionMessage(activity.getString(actionMessage)).setSnackBarListener(listener).build();
+                .setActionMessage(activity.getString(actionMessage))
+                .setSnackBarListener(listener)
+                .build();
 
         SnackBarManager mngr = SnackBarManager.getInstance();
         mngr.addSnackBar(activity, sbi);
@@ -157,8 +160,11 @@ public class SnackBar {
      * @param listener      The SnackBarListener to handle callbacks
      */
     public static void show(Activity activity, String message, String actionMessage, SnackBarListener listener) {
-        SnackBarItem sbi = new SnackBarItem.Builder(activity).setMessage(message)
-                .setActionMessage(actionMessage).setSnackBarListener(listener).build();
+        SnackBarItem sbi = new SnackBarItem.Builder(activity)
+                .setMessage(message)
+                .setActionMessage(actionMessage)
+                .setSnackBarListener(listener)
+                .build();
 
         SnackBarManager mngr = SnackBarManager.getInstance();
         mngr.addSnackBar(activity, sbi);
@@ -177,7 +183,10 @@ public class SnackBar {
      */
     public static void show(Activity activity, String message, SnackBarListener listener) {
         SnackBarItem sbi = new SnackBarItem.Builder(activity)
-                .setMessage(message).setSnackBarListener(listener).build();
+                .setMessage(message)
+                .setSnackBarListener(listener)
+                .build();
+
         SnackBarManager mngr = SnackBarManager.getInstance();
         mngr.addSnackBar(activity, sbi);
 
@@ -206,6 +215,17 @@ public class SnackBar {
     }
 
     /**
+     * Cleans up the {@link SnackBarItem} and the {@link Activity} it is tied to.
+     * Used by the {@link com.kenny.snackbar.SnackBar.SnackBarManager} for SnackBar cleanup
+     *
+     * @param activity     The {@link Activity} tied to the {@link SnackBarItem}
+     * @param snackBarItem The {@link SnackBarItem} to clean up
+     */
+    public static void dispose(Activity activity, SnackBarItem snackBarItem) {
+        SnackBarManager.getInstance().disposeSnackBar(activity, snackBarItem);
+    }
+
+    /**
      * Cancels all SnackBars for the given activity
      *
      * @param activity
@@ -214,23 +234,22 @@ public class SnackBar {
         SnackBarManager.getInstance().cancelSnackBars(activity);
     }
 
-    private static class SnackBarManager implements SnackBarItem.SnackBarDisposeListener {
+    private static class SnackBarManager {
         private final ConcurrentHashMap<Activity, ConcurrentLinkedQueue<SnackBarItem>> mQueue = new ConcurrentHashMap<>();
 
         private static SnackBarManager mManager;
 
         private boolean mIsShowingSnackBar = false;
 
-        public static SnackBarManager getInstance() {
-            if (mManager == null) {
-                mManager = new SnackBarManager();
-            }
+        private boolean mIsCanceling = false;
 
+        public static SnackBarManager getInstance() {
+            if (mManager == null) mManager = new SnackBarManager();
             return mManager;
         }
 
         /**
-         * Cancels all Snack Bar messages for an activity
+         * Cancels all SnackBar messages for an activity
          *
          * @param activity
          */
@@ -238,17 +257,20 @@ public class SnackBar {
             ConcurrentLinkedQueue<SnackBarItem> list = mQueue.get(activity);
 
             if (list != null) {
+                mIsCanceling = true;
+
                 for (SnackBarItem items : list) {
                     items.cancel();
                 }
 
+                mIsCanceling = false;
                 list.clear();
                 mQueue.remove(activity);
             }
         }
 
         /**
-         * Adds a Snack Bar to The queue to be displayed
+         * Adds a SnackBar to The queue to be displayed
          *
          * @param activity
          * @param item
@@ -265,7 +287,7 @@ public class SnackBar {
         }
 
         /**
-         * Shows the next SnackBar for the current activity
+         * Shows the nextSnackBar for the current activity
          *
          * @param activity
          */
@@ -274,23 +296,28 @@ public class SnackBar {
 
             if (list != null && !list.isEmpty()) {
                 mIsShowingSnackBar = true;
-                list.peek().show(activity, this);
+                list.peek().show(activity);
             }
         }
 
-        @Override
-        public void onDispose(Activity activity, SnackBarItem snackBar) {
+        /**
+         * Cleans up the {@link SnackBarItem} and the {@link Activity} it is tied to
+         *
+         * @param activity     The {@link Activity} tied to the {@link SnackBarItem}
+         * @param snackBarItem The {@link SnackBarItem} to clean up
+         */
+        public void disposeSnackBar(Activity activity, SnackBarItem snackBarItem) {
             ConcurrentLinkedQueue<SnackBarItem> list = mQueue.get(activity);
 
             if (list != null) {
-                list.remove(snackBar);
+                list.remove(snackBarItem);
 
                 if (list.peek() == null) {
                     mQueue.remove(activity);
                     mIsShowingSnackBar = false;
-                } else {
+                } else if(!mIsCanceling) {
                     mIsShowingSnackBar = true;
-                    list.peek().show(activity, this);
+                    list.peek().show(activity);
                 }
             }
         }
