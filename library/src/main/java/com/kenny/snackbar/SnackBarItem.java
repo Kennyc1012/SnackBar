@@ -26,6 +26,9 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  * Copyright (C) 2014 Kenny Campagna
  *
@@ -75,6 +78,8 @@ public class SnackBarItem {
     private boolean mShouldDisposeOnCancel = true;
 
     private boolean mIsDisposed = false;
+
+    private boolean mAutoDismiss = true;
 
     private Activity mActivity;
 
@@ -242,17 +247,21 @@ public class SnackBarItem {
         mAnimator.setInterpolator(AnimationUtils.loadInterpolator(mActivity, mInterpolatorId));
         Animator appear = getAppearAnimation();
         appear.setTarget(mSnackBarView);
+        List<Animator> appearAnimations = new ArrayList<>();
+        appearAnimations.add(appear);
 
-        mAnimator.playSequentially(
-                appear,
-                ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 1.0f).setDuration(mAnimationDuration),
-                ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 0.0f).setDuration(mActivity.getResources().getInteger(R.integer.snackbar_disappear_animation_length))
-        );
+        // Only add this animation if the SnackBar should auto dismiss itself
+        if (mAutoDismiss) {
+            appearAnimations.add(ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 1.0f).setDuration(mAnimationDuration));
+            appearAnimations.add(ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 0.0f).setDuration(mActivity.getResources().getInteger(R.integer.snackbar_disappear_animation_length)));
+        }
+
+        mAnimator.playSequentially(appearAnimations);
 
         mAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (mShouldDisposeOnCancel) {
+                if (mShouldDisposeOnCancel && mAutoDismiss) {
                     if (mSnackBarListener != null) mSnackBarListener.onSnackBarFinished(mObject);
                     dispose();
                 }
@@ -540,6 +549,18 @@ public class SnackBarItem {
          */
         public Builder setActionTypeface(Typeface typeFace) {
             mSnackBarItem.mActionTypeface = typeFace;
+            return this;
+        }
+
+        /**
+         * Sets whether a SnackBar should auto dismiss itself, defaulted to true.
+         * If set to false,* the duration value is ignored for the SnackBar
+         *
+         * @param autoDismiss
+         * @return
+         */
+        public Builder setAutoDismiss(boolean autoDismiss) {
+            mSnackBarItem.mAutoDismiss = autoDismiss;
             return this;
         }
 
