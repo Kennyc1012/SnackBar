@@ -51,7 +51,9 @@ public class SnackBarItem {
                     R.attr.snack_bar_duration,
                     R.attr.snack_bar_interpolator,
                     R.attr.snack_bar_text_action_color,
-                    R.attr.snack_bar_text_color
+                    R.attr.snack_bar_text_color,
+                    R.attr.snack_bar_message_typeface,
+                    R.attr.snack_bar_action_typeface
             };
 
     private View.OnClickListener mActionClickListener;
@@ -214,6 +216,17 @@ public class SnackBarItem {
         if (mInterpolatorId == -1) mInterpolatorId = a.getResourceId(2, android.R.anim.accelerate_decelerate_interpolator);
         if (mActionColor == -1) mActionColor = a.getColor(3, res.getColor(R.color.snack_bar_action_default));
         if (mMessageColor == -1) mMessageColor = a.getColor(4, Color.WHITE);
+
+        if (mMessageTypeface == null) {
+            String fontFile = a.getNonResourceString(5);
+            if (!TextUtils.isEmpty(fontFile)) mMessageTypeface = Typeface.createFromAsset(mActivity.getAssets(), fontFile);
+        }
+
+        if (mActionTypeface == null) {
+            String fontFile = a.getNonResourceString(6);
+            if (!TextUtils.isEmpty(fontFile)) mActionTypeface = Typeface.createFromAsset(mActivity.getAssets(), fontFile);
+        }
+
         a.recycle();
     }
 

@@ -6,5 +6,7 @@
     <attr name="snack_bar_text_action_color" format="color" />
     <attr name="snack_bar_duration" format="integer" />
     <attr name="snack_bar_interpolator" format="reference" />
+    <attr name="snack_bar_message_typeface" format="string" />
+    <attr name="snack_bar_action_typeface" format="string" />
 
 </resources>
