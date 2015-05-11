@@ -89,6 +89,10 @@ public class SnackBarItem {
 
     private float mPreviousY;
 
+    private Typeface mMessageTypeface = null;
+
+    private Typeface mActionTypeface = null;
+
     private SnackBarItem(Activity activty) {
         mActivity = activty;
     }
@@ -122,7 +126,7 @@ public class SnackBarItem {
         TextView messageTV = (TextView) mSnackBarView.findViewById(R.id.message);
         messageTV.setText(mMessageString);
         messageTV.setTextColor(mMessageColor);
-        messageTV.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "RobotoCondensed-Regular.ttf"));
+        if (mMessageTypeface != null) messageTV.setTypeface(mMessageTypeface);
 
         if (!TextUtils.isEmpty(mActionMessage)) {
             // Only set up the action button when an action message ahs been supplied
@@ -174,6 +178,7 @@ public class SnackBarItem {
         action.setVisibility(View.VISIBLE);
         action.setText(mActionMessage.toUpperCase());
         action.setTextColor(mActionColor);
+        if (mActionTypeface != null) action.setTypeface(mActionTypeface);
 
         action.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -518,6 +523,28 @@ public class SnackBarItem {
          */
         public Builder setSnackBarListener(SnackBarListener listener) {
             mSnackBarItem.mSnackBarListener = listener;
+            return this;
+        }
+
+        /**
+         * Sets the typeface for the SnackBar message
+         *
+         * @param typeFace
+         * @return
+         */
+        public Builder setMessageTypeface(Typeface typeFace) {
+            mSnackBarItem.mMessageTypeface = typeFace;
+            return this;
+        }
+
+        /**
+         * Sets the typeface for the SnackBar action
+         *
+         * @param typeFace
+         * @return
+         */
+        public Builder setActionTypeface(Typeface typeFace) {
+            mSnackBarItem.mActionTypeface = typeFace;
             return this;
         }
 
