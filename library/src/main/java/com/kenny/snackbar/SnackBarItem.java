@@ -68,7 +68,7 @@ public class SnackBarItem {
     private int mMessageColor = -1;
 
     // The default color the action item will be
-    private int mDefaultActionColor = -1;
+    private int mActionColor = -1;
 
     /* Flag for when the animation is canceled, should the item be disposed of. Will be set to false when
      the action button is selected so it removes immediately.*/
@@ -129,8 +129,7 @@ public class SnackBarItem {
             setupActionButton((Button) mSnackBarView.findViewById(R.id.action));
         }
 
-        if (mAnimationDuration <= 0)
-            mAnimationDuration = activity.getResources().getInteger(R.integer.snackbar_duration_length);
+        if (mAnimationDuration <= 0) mAnimationDuration = activity.getResources().getInteger(R.integer.snackbar_duration_length);
         if (mInterpolatorId == -1) mInterpolatorId = android.R.interpolator.accelerate_decelerate;
         parent.addView(mSnackBarView);
         createShowAnimation();
@@ -174,7 +173,7 @@ public class SnackBarItem {
     private void setupActionButton(Button action) {
         action.setVisibility(View.VISIBLE);
         action.setText(mActionMessage.toUpperCase());
-        action.setTextColor(mDefaultActionColor);
+        action.setTextColor(mActionColor);
 
         action.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,13 +196,10 @@ public class SnackBarItem {
         TypedArray a = context.obtainStyledAttributes(ATTR);
         Resources res = context.getResources();
 
-        if (mSnackBarColor == -1)
-            mSnackBarColor = a.getColor(0, res.getColor(R.color.snack_bar_bg));
+        if (mSnackBarColor == -1) mSnackBarColor = a.getColor(0, res.getColor(R.color.snack_bar_bg));
         if (mAnimationDuration == -1) mAnimationDuration = a.getInt(1, 3000);
-        if (mInterpolatorId == -1)
-            mInterpolatorId = a.getResourceId(2, android.R.anim.accelerate_decelerate_interpolator);
-        if (mDefaultActionColor == -1)
-            mDefaultActionColor = a.getColor(3, res.getColor(R.color.snack_bar_action_default));
+        if (mInterpolatorId == -1) mInterpolatorId = a.getResourceId(2, android.R.anim.accelerate_decelerate_interpolator);
+        if (mActionColor == -1) mActionColor = a.getColor(3, res.getColor(R.color.snack_bar_action_default));
         if (mMessageColor == -1) mMessageColor = a.getColor(4, Color.WHITE);
         a.recycle();
     }
@@ -277,7 +273,6 @@ public class SnackBarItem {
      * Sets up and starts the hide animation
      */
     private void createHideAnimation() {
-
         ObjectAnimator anim = ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 0.0f)
                 .setDuration(mActivity.getResources().getInteger(R.integer.snackbar_disappear_animation_length));
 
@@ -412,7 +407,7 @@ public class SnackBarItem {
          * @return
          */
         public Builder setActionMessageColor(int color) {
-            mSnackBarItem.mDefaultActionColor = color;
+            mSnackBarItem.mActionColor = color;
             return this;
         }
 
@@ -423,7 +418,7 @@ public class SnackBarItem {
          * @return
          */
         public Builder setActionMessageColorResource(@ColorRes int color) {
-            mSnackBarItem.mDefaultActionColor = mSnackBarItem.mActivity.getResources().getColor(color);
+            mSnackBarItem.mActionColor = mSnackBarItem.mActivity.getResources().getColor(color);
             return this;
         }
 
@@ -542,5 +537,4 @@ public class SnackBarItem {
             return mSnackBarItem;
         }
     }
-
 }

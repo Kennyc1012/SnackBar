@@ -315,7 +315,7 @@ public class SnackBar {
                 if (list.peek() == null) {
                     mQueue.remove(activity);
                     mIsShowingSnackBar = false;
-                } else if(!mIsCanceling) {
+                } else if (!mIsCanceling) {
                     mIsShowingSnackBar = true;
                     list.peek().show(activity);
                 }
