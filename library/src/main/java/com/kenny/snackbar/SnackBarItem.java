@@ -306,28 +306,23 @@ public class SnackBarItem {
         // Only Kit-Kit+ devices can have a translucent style
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Resources res = mActivity.getResources();
+            int transparencyId = res.getIdentifier("config_enableTranslucentDecor", "bool", "android");
             int[] attrs = new int[]{android.R.attr.windowTranslucentNavigation};
             TypedArray a = mActivity.getTheme().obtainStyledAttributes(attrs);
-            boolean isTranslucent = a.getBoolean(0, false);
+            boolean isTranslucent = a.getBoolean(0, false) && transparencyId > 0 && res.getBoolean(transparencyId);
             a.recycle();
 
             if (isTranslucent) {
-                boolean isLandscape = res.getBoolean(R.bool.sb_isLandscape);
-                boolean isTablet = res.getBoolean(R.bool.sb_isTablet);
+                int resourceId = res.getIdentifier("navigation_bar_height", "dimen", "android");
+                float animationFrom = res.getDimension(R.dimen.snack_bar_height);
+                float animationTo = res.getDimension(R.dimen.snack_bar_animation_position);
+                if (resourceId > 0) animationTo -= res.getDimensionPixelSize(resourceId);
 
-                // Translucent nav bars will appear on anything that isn't landscape, as well as tablets in landscape
-                if (!isLandscape || isTablet) {
-                    int resourceId = res.getIdentifier("navigation_bar_height", "dimen", "android");
-                    float animationFrom = res.getDimension(R.dimen.snack_bar_height);
-                    float animationTo = res.getDimension(R.dimen.snack_bar_animation_position);
-                    if (resourceId > 0) animationTo -= res.getDimensionPixelSize(resourceId);
-
-                    AnimatorSet set = new AnimatorSet();
-                    set.playTogether(
-                            ObjectAnimator.ofFloat(mSnackBarView, "translationY", animationFrom, animationTo),
-                            ObjectAnimator.ofFloat(mSnackBarView, "alpha", 0.0f, 1.0f));
-                    return set;
-                }
+                AnimatorSet set = new AnimatorSet();
+                set.playTogether(
+                        ObjectAnimator.ofFloat(mSnackBarView, "translationY", animationFrom, animationTo),
+                        ObjectAnimator.ofFloat(mSnackBarView, "alpha", 0.0f, 1.0f));
+                return set;
             }
         }
 

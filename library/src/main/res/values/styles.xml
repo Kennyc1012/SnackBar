@@ -30,6 +30,7 @@
         <item name="android:minHeight">0dp</item>
         <item name="android:textAppearance">@style/TextAppearance.Medium</item>
         <item name="android:textSize">@dimen/snack_bar_action_text_size</item>
+        <item name="android:layout_gravity">center_vertical</item>
     </style>
 
     <style name="TextAppearance.Regular" parent="android:TextAppearance">
