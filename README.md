@@ -28,7 +28,7 @@ SnackBar.show(getActivity(), R.string.hello_world, R.string.undo, onClickListene
 #Customization
 ### SnackBars can be customized by creating a SnackBarItem with the Builder factory
 ```java
-SnackBarItem sbi = new SnackBarItem.Builder(getActivity())
+ new SnackBarItem.Builder(getActivity())
 .setMessageResource(R.string.message)
 .setActionMessageResource(R.string.action)
 .setObject(myObject)
@@ -50,6 +50,8 @@ The following attributes can be used for styling a SnackBar
    <attr name="snack_bar_text_action_color" format="color" />
    <attr name="snack_bar_duration" format="integer" />
    <attr name="snack_bar_interpolator" format="reference" />
+   <attr name="snack_bar_message_typeface" format="string" />
+   <attr name="snack_bar_action_typeface" format="string" />
    ...
    ...
    ...
@@ -109,7 +111,7 @@ repositories {
 
 
 dependencies {
-    compile 'com.kennyc:snackbar:2.0.2'
+    compile 'com.kennyc:snackbar:2.1’
 }
 ```
 
