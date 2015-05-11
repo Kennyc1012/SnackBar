@@ -81,6 +81,8 @@ public class SnackBarItem {
 
     private boolean mAutoDismiss = true;
 
+    private boolean mIsGestureAccepted = false;
+
     private Activity mActivity;
 
     private SnackBarListener mSnackBarListener;
@@ -152,7 +154,7 @@ public class SnackBarItem {
         mSnackBarView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                if (mIsDisposed) return false;
+                if (mIsDisposed || mIsGestureAccepted) return false;
 
                 float y = event.getY();
 
@@ -162,6 +164,7 @@ public class SnackBarItem {
                         view.getLocationInWindow(location);
 
                         if (y > mPreviousY && y - mPreviousY >= 50) {
+                            mIsGestureAccepted = true;
                             mShouldDisposeOnCancel = false;
                             mAnimator.cancel();
                             createHideAnimation();
