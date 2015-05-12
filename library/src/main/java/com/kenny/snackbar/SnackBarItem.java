@@ -18,6 +18,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.InterpolatorRes;
 import android.support.annotation.StringRes;
+import android.support.annotation.StyleRes;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,16 +46,17 @@ import java.util.List;
  * limitations under the License.
  */
 public class SnackBarItem {
-    private static final int[] ATTR = new int[]
-            {
-                    R.attr.snack_bar_background_color,
-                    R.attr.snack_bar_duration,
-                    R.attr.snack_bar_interpolator,
-                    R.attr.snack_bar_text_action_color,
-                    R.attr.snack_bar_text_color,
-                    R.attr.snack_bar_message_typeface,
-                    R.attr.snack_bar_action_typeface
-            };
+    private static final int[] ATTR = new int[]{
+            R.attr.snack_bar_background_color,
+            R.attr.snack_bar_duration,
+            R.attr.snack_bar_interpolator,
+            R.attr.snack_bar_text_action_color,
+            R.attr.snack_bar_text_color,
+            R.attr.snack_bar_message_typeface,
+            R.attr.snack_bar_action_typeface,
+            R.attr.snack_bar_message_text_appearance,
+            R.attr.snack_bar_action_text_appearance
+    };
 
     private View.OnClickListener mActionClickListener;
 
@@ -70,6 +72,7 @@ public class SnackBarItem {
     // The color of the background
     private int mSnackBarColor = -1;
 
+    // The color of the message
     private int mMessageColor = -1;
 
     // The default color the action item will be
@@ -101,6 +104,12 @@ public class SnackBarItem {
     private Typeface mMessageTypeface = null;
 
     private Typeface mActionTypeface = null;
+
+    @StyleRes
+    private int mMessageTextAppearance = -1;
+
+    @StyleRes
+    private int mActionTextAppearance = -1;
 
     private SnackBarItem(Activity activty) {
         mActivity = activty;
@@ -135,6 +144,7 @@ public class SnackBarItem {
         TextView messageTV = (TextView) mSnackBarView.findViewById(R.id.message);
         messageTV.setText(mMessageString);
         messageTV.setTextColor(mMessageColor);
+        if (mMessageTextAppearance != -1) messageTV.setTextAppearance(mActivity, mMessageTextAppearance);
         if (mMessageTypeface != null) messageTV.setTypeface(mMessageTypeface);
 
         if (!TextUtils.isEmpty(mActionMessage)) {
@@ -188,6 +198,7 @@ public class SnackBarItem {
         action.setVisibility(View.VISIBLE);
         action.setText(mActionMessage.toUpperCase());
         action.setTextColor(mActionColor);
+        if (mActionTextAppearance != -1) action.setTextAppearance(mActivity, mActionTextAppearance);
         if (mActionTypeface != null) action.setTypeface(mActionTypeface);
 
         action.setOnClickListener(new View.OnClickListener() {
@@ -227,6 +238,8 @@ public class SnackBarItem {
             if (!TextUtils.isEmpty(fontFile)) mActionTypeface = Typeface.createFromAsset(mActivity.getAssets(), fontFile);
         }
 
+        if (mMessageTextAppearance == -1) mMessageTextAppearance = a.getResourceId(7, -1);
+        if (mActionTextAppearance == -1) mActionTextAppearance = a.getResourceId(8, -1);
         a.recycle();
     }
 
@@ -577,6 +590,28 @@ public class SnackBarItem {
          */
         public Builder setAutoDismiss(boolean autoDismiss) {
             mSnackBarItem.mAutoDismiss = autoDismiss;
+            return this;
+        }
+
+        /**
+         * Sets the text appearance style for the SnackBar message
+         *
+         * @param textAppearance
+         * @return
+         */
+        public Builder setMessageTextAppearance(@StyleRes int textAppearance) {
+            mSnackBarItem.mMessageTextAppearance = textAppearance;
+            return this;
+        }
+
+        /**
+         * Sets the text appearance style for the SnackBar action
+         *
+         * @param textAppearance
+         * @return
+         */
+        public Builder setActionTextAppearance(@StyleRes int textAppearance) {
+            mSnackBarItem.mActionTextAppearance = textAppearance;
             return this;
         }
 
