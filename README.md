@@ -111,7 +111,7 @@ repositories {
 
 
 dependencies {
-    compile 'com.kennyc:snackbar:2.1’
+    compile 'com.kennyc:snackbar:2.1'
 }
 ```
 
