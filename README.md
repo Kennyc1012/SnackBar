@@ -8,7 +8,7 @@ SnackBar
 ![screenshot](https://github.com/Kennyc1012/SnackBar/blob/master/art/phone.gif)
 
 #Features
-- Customization including message, action message, action color, message color, background color, action click handle, animation duration, and animation interpolator  
+- Customization including message, action message, action color, message color, background color, action click handle, animation duration, animation interpolator, typeface, and text appearance   
 - Tablet support 
 - Swipe to dismiss
 - Callbacks for the different SnackBar states (started, actionClicked, finished)
@@ -37,6 +37,8 @@ SnackBar.show(getActivity(), R.string.hello_world, R.string.undo, onClickListene
 .setSnackBarMessageColorResource(R.color.my_yellow)
 .setSnackBarBackgroundColorResource(R.color.my_green)
 .setInterpolatorResource(android.R.interpolator.accelerate_decelerate)
+.setMessageTextAppearance(R.style.MessageTextAppearance)
+.setActionTextAppearance(R.style.ActionTextAppearance)
 .setDuration(5000)
 .setSnackBarListener(myListener)
 .show();
@@ -52,6 +54,8 @@ The following attributes can be used for styling a SnackBar
    <attr name="snack_bar_interpolator" format="reference" />
    <attr name="snack_bar_message_typeface" format="string" />
    <attr name="snack_bar_action_typeface" format="string" />
+   <attr name="snack_bar_message_text_appearance" format="reference" />
+   <attr name="snack_bar_action_text_appearance" format="reference" />
    ...
    ...
    ...
@@ -111,7 +115,7 @@ repositories {
 
 
 dependencies {
-    compile 'com.kennyc:snackbar:2.1’
+    compile 'com.kennyc:snackbar:2.2’
 }
 ```
 
