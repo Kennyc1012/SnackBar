@@ -56,6 +56,7 @@ The following attributes can be used for styling a SnackBar
    <attr name="snack_bar_action_typeface" format="string" />
    <attr name="snack_bar_message_text_appearance" format="reference" />
    <attr name="snack_bar_action_text_appearance" format="reference" />
+   <attr name="snack_bar_offset" format="reference" />
    ...
    ...
    ...
@@ -78,15 +79,10 @@ The following attributes can be used for styling a SnackBar
 publc void onSnackBarStarted(Object object){
 }
 
-// Called when the action button is pressed
-@Override
-public void onSnackBarAction(Object object){
-}
-
 // Called when the SnackBar finishes with its animation
 // Will be called if the action button is pressed
 @Override
-public void onSnackBarFinished(Object object){
+public void onSnackBarFinished(Object object, boolean actionPressed){
 }
 ```
 
@@ -115,7 +111,7 @@ repositories {
 
 
 dependencies {
-    compile 'com.kennyc:snackbar:2.2'
+    compile 'com.kennyc:snackbar:2.3'
 }
 ```
 
