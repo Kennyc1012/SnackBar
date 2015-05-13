@@ -1,7 +1,6 @@
 package com.kenny.snackbar;
 
 import android.animation.Animator;
-import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -15,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.annotation.ColorRes;
+import android.support.annotation.DimenRes;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.InterpolatorRes;
 import android.support.annotation.StringRes;
@@ -55,7 +55,8 @@ public class SnackBarItem {
             R.attr.snack_bar_message_typeface,
             R.attr.snack_bar_action_typeface,
             R.attr.snack_bar_message_text_appearance,
-            R.attr.snack_bar_action_text_appearance
+            R.attr.snack_bar_action_text_appearance,
+            R.attr.snack_bar_offset
     };
 
     private View.OnClickListener mActionClickListener;
@@ -111,23 +112,22 @@ public class SnackBarItem {
     @StyleRes
     private int mActionTextAppearance = -1;
 
+    private float mSnackBarOffset = 0;
+
     private SnackBarItem(Activity activty) {
         mActivity = activty;
     }
 
     /**
      * Shows the Snack Bar. This method is strictly for the SnackBarManager to call.
-     *
-     * @param activity
      */
-    public void show(Activity activity) {
+    public void show() {
         if (TextUtils.isEmpty(mMessageString)) {
             throw new IllegalArgumentException("No message has been set for the Snack Bar");
         }
 
-        mActivity = activity;
-        FrameLayout parent = (FrameLayout) activity.findViewById(android.R.id.content);
-        mSnackBarView = activity.getLayoutInflater().inflate(R.layout.snack_bar, parent, false);
+        FrameLayout parent = (FrameLayout) mActivity.findViewById(android.R.id.content);
+        mSnackBarView = mActivity.getLayoutInflater().inflate(R.layout.snack_bar, parent, false);
         getAttributes(mActivity);
 
         // Setting up the background
@@ -152,7 +152,7 @@ public class SnackBarItem {
             setupActionButton((Button) mSnackBarView.findViewById(R.id.action));
         }
 
-        if (mAnimationDuration <= 0) mAnimationDuration = activity.getResources().getInteger(R.integer.snackbar_duration_length);
+        if (mAnimationDuration <= 0) mAnimationDuration = mActivity.getResources().getInteger(R.integer.snackbar_duration_length);
         if (mInterpolatorId == -1) mInterpolatorId = android.R.interpolator.accelerate_decelerate;
         parent.addView(mSnackBarView);
         createShowAnimation();
@@ -240,6 +240,7 @@ public class SnackBarItem {
 
         if (mMessageTextAppearance == -1) mMessageTextAppearance = a.getResourceId(7, -1);
         if (mActionTextAppearance == -1) mActionTextAppearance = a.getResourceId(8, -1);
+        if (mSnackBarOffset == 0) mSnackBarOffset = a.getDimension(9, 0);
         a.recycle();
     }
 
@@ -341,30 +342,41 @@ public class SnackBarItem {
      * @return
      */
     private Animator getAppearAnimation() {
+        Resources res = mActivity.getResources();
+        float animationFrom = res.getDimension(R.dimen.snack_bar_height);
+        float animationTo = res.getDimension(R.dimen.snack_bar_animation_position) - mSnackBarOffset;
+
+        if (hasTranslucentNavigationBar()) {
+            int resourceId = res.getIdentifier("navigation_bar_height", "dimen", "android");
+            if (resourceId > 0) animationTo -= res.getDimensionPixelSize(resourceId);
+        }
+
+        AnimatorSet set = new AnimatorSet();
+        set.setDuration(res.getInteger(R.integer.snackbar_appear_animation_length));
+        set.playTogether(
+                ObjectAnimator.ofFloat(mSnackBarView, "translationY", animationFrom, animationTo),
+                ObjectAnimator.ofFloat(mSnackBarView, "alpha", 0.0f, 1.0f));
+        return set;
+    }
+
+    /**
+     * Returns if the current style supports a transparent navigation bar
+     *
+     * @return
+     */
+    private boolean hasTranslucentNavigationBar() {
+        boolean isTranslucent = false;
         // Only Kit-Kit+ devices can have a translucent style
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Resources res = mActivity.getResources();
             int transparencyId = res.getIdentifier("config_enableTranslucentDecor", "bool", "android");
             int[] attrs = new int[]{android.R.attr.windowTranslucentNavigation};
             TypedArray a = mActivity.getTheme().obtainStyledAttributes(attrs);
-            boolean isTranslucent = a.getBoolean(0, false) && transparencyId > 0 && res.getBoolean(transparencyId);
+            isTranslucent = a.getBoolean(0, false) && transparencyId > 0 && res.getBoolean(transparencyId);
             a.recycle();
-
-            if (isTranslucent) {
-                int resourceId = res.getIdentifier("navigation_bar_height", "dimen", "android");
-                float animationFrom = res.getDimension(R.dimen.snack_bar_height);
-                float animationTo = res.getDimension(R.dimen.snack_bar_animation_position);
-                if (resourceId > 0) animationTo -= res.getDimensionPixelSize(resourceId);
-
-                AnimatorSet set = new AnimatorSet();
-                set.playTogether(
-                        ObjectAnimator.ofFloat(mSnackBarView, "translationY", animationFrom, animationTo),
-                        ObjectAnimator.ofFloat(mSnackBarView, "alpha", 0.0f, 1.0f));
-                return set;
-            }
         }
 
-        return AnimatorInflater.loadAnimator(mActivity, R.animator.appear);
+        return isTranslucent;
     }
 
     /**
@@ -612,6 +624,28 @@ public class SnackBarItem {
          */
         public Builder setActionTextAppearance(@StyleRes int textAppearance) {
             mSnackBarItem.mActionTextAppearance = textAppearance;
+            return this;
+        }
+
+        /**
+         * Sets the offset for the SnackBar
+         *
+         * @param offset
+         * @return
+         */
+        public Builder setSnackBarOffset(float offset) {
+            mSnackBarItem.mSnackBarOffset = offset;
+            return this;
+        }
+
+        /**
+         * Sets the offset resource for the SnackBar
+         *
+         * @param offset
+         * @return
+         */
+        public Builder setSnackBarOffsetResource(@DimenRes int offset) {
+            mSnackBarItem.mSnackBarOffset = mSnackBarItem.mActivity.getResources().getDimension(offset);
             return this;
         }
 

@@ -34,12 +34,7 @@ public class SnackBar {
                 .setMessageResource(message)
                 .build();
 
-        SnackBarManager mngr = SnackBarManager.getInstance();
-        mngr.addSnackBar(activity, sbi);
-
-        if (!mngr.isShowingSnackBar()) {
-            mngr.showSnackBars(activity);
-        }
+        SnackBarManager.getInstance().addSnackBar(activity, sbi);
     }
 
     /**
@@ -57,12 +52,7 @@ public class SnackBar {
                 .setActionClickListener(onClickListener)
                 .build();
 
-        SnackBarManager mngr = SnackBarManager.getInstance();
-        mngr.addSnackBar(activity, sbi);
-
-        if (!mngr.isShowingSnackBar()) {
-            mngr.showSnackBars(activity);
-        }
+        SnackBarManager.getInstance().addSnackBar(activity, sbi);
     }
 
     /**
@@ -76,12 +66,7 @@ public class SnackBar {
                 .setMessage(message)
                 .build();
 
-        SnackBarManager mngr = SnackBarManager.getInstance();
-        mngr.addSnackBar(activity, sbi);
-
-        if (!mngr.isShowingSnackBar()) {
-            mngr.showSnackBars(activity);
-        }
+        SnackBarManager.getInstance().addSnackBar(activity, sbi);
     }
 
     /**
@@ -99,12 +84,7 @@ public class SnackBar {
                 .setActionClickListener(onClickListener)
                 .build();
 
-        SnackBarManager mngr = SnackBarManager.getInstance();
-        mngr.addSnackBar(activity, sbi);
-
-        if (!mngr.isShowingSnackBar()) {
-            mngr.showSnackBars(activity);
-        }
+        SnackBarManager.getInstance().addSnackBar(activity, sbi);
     }
 
     /**
@@ -120,12 +100,7 @@ public class SnackBar {
                 .setSnackBarListener(listener)
                 .build();
 
-        SnackBarManager mngr = SnackBarManager.getInstance();
-        mngr.addSnackBar(activity, sbi);
-
-        if (!mngr.isShowingSnackBar()) {
-            mngr.showSnackBars(activity);
-        }
+        SnackBarManager.getInstance().addSnackBar(activity, sbi);
     }
 
     /**
@@ -143,12 +118,7 @@ public class SnackBar {
                 .setSnackBarListener(listener)
                 .build();
 
-        SnackBarManager mngr = SnackBarManager.getInstance();
-        mngr.addSnackBar(activity, sbi);
-
-        if (!mngr.isShowingSnackBar()) {
-            mngr.showSnackBars(activity);
-        }
+        SnackBarManager.getInstance().addSnackBar(activity, sbi);
     }
 
     /**
@@ -166,12 +136,7 @@ public class SnackBar {
                 .setSnackBarListener(listener)
                 .build();
 
-        SnackBarManager mngr = SnackBarManager.getInstance();
-        mngr.addSnackBar(activity, sbi);
-
-        if (!mngr.isShowingSnackBar()) {
-            mngr.showSnackBars(activity);
-        }
+        SnackBarManager.getInstance().addSnackBar(activity, sbi);
     }
 
     /**
@@ -187,12 +152,7 @@ public class SnackBar {
                 .setSnackBarListener(listener)
                 .build();
 
-        SnackBarManager mngr = SnackBarManager.getInstance();
-        mngr.addSnackBar(activity, sbi);
-
-        if (!mngr.isShowingSnackBar()) {
-            mngr.showSnackBars(activity);
-        }
+        SnackBarManager.getInstance().addSnackBar(activity, sbi);
     }
 
     /**
@@ -206,12 +166,7 @@ public class SnackBar {
             throw new NullPointerException("SnackBarItem can not be null");
         }
 
-        SnackBarManager mngr = SnackBarManager.getInstance();
-        mngr.addSnackBar(activity, snackBarItem);
-
-        if (!mngr.isShowingSnackBar()) {
-            mngr.showSnackBars(activity);
-        }
+        SnackBarManager.getInstance().addSnackBar(activity, snackBarItem);
     }
 
     /**
@@ -284,6 +239,7 @@ public class SnackBar {
             }
 
             list.add(item);
+            if (!mIsShowingSnackBar) showSnackBars(activity);
         }
 
         /**
@@ -296,7 +252,7 @@ public class SnackBar {
 
             if (list != null && !list.isEmpty()) {
                 mIsShowingSnackBar = true;
-                list.peek().show(activity);
+                list.peek().show();
             }
         }
 
@@ -317,13 +273,9 @@ public class SnackBar {
                     mIsShowingSnackBar = false;
                 } else if (!mIsCanceling) {
                     mIsShowingSnackBar = true;
-                    list.peek().show(activity);
+                    list.peek().show();
                 }
             }
-        }
-
-        public boolean isShowingSnackBar() {
-            return mIsShowingSnackBar;
         }
     }
 }
