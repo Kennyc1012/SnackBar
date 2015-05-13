@@ -24,16 +24,10 @@ public interface SnackBarListener {
     void onSnackBarStarted(Object object);
 
     /**
-     * Callback for when the action button is selected
-     *
-     * @param object Optional object
-     */
-    void onSnackBarAction(Object object);
-
-    /**
      * Callback for when the SnackBar finishes its animation
      *
-     * @param object Optional object
+     * @param object        Optional object
+     * @param actionPressed If the action button was pressed
      */
-    void onSnackBarFinished(Object object);
+    void onSnackBarFinished(Object object, boolean actionPressed);
 }

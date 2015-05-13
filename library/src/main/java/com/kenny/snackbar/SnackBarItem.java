@@ -114,6 +114,8 @@ public class SnackBarItem {
 
     private float mSnackBarOffset = 0;
 
+    private boolean mActionButtonPressed = false;
+
     private SnackBarItem(Activity activty) {
         mActivity = activty;
     }
@@ -204,10 +206,10 @@ public class SnackBarItem {
         action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mActionButtonPressed = true;
                 mShouldDisposeOnCancel = false;
                 mAnimator.cancel();
                 if (mActionClickListener != null) mActionClickListener.onClick(view);
-                if (mSnackBarListener != null) mSnackBarListener.onSnackBarAction(mObject);
                 createHideAnimation();
             }
         });
@@ -292,7 +294,7 @@ public class SnackBarItem {
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (mShouldDisposeOnCancel && mAutoDismiss) {
-                    if (mSnackBarListener != null) mSnackBarListener.onSnackBarFinished(mObject);
+                    if (mSnackBarListener != null) mSnackBarListener.onSnackBarFinished(mObject, mActionButtonPressed);
                     dispose();
                 }
 
@@ -328,7 +330,7 @@ public class SnackBarItem {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (mSnackBarListener != null) mSnackBarListener.onSnackBarFinished(mObject);
+                if (mSnackBarListener != null) mSnackBarListener.onSnackBarFinished(mObject, mActionButtonPressed);
                 dispose();
             }
         });

@@ -56,12 +56,7 @@ public class MainActivity extends AppCompatActivity implements SnackBarListener,
     }
 
     @Override
-    public void onSnackBarAction(Object object) {
-        Log.v(TAG, "SnackBar Action Pressed with object " + object);
-    }
-
-    @Override
-    public void onSnackBarFinished(Object object) {
-        Log.v(TAG, "SnackBar Finished with object " + object);
+    public void onSnackBarFinished(Object object, boolean actionPressed) {
+        Log.v(TAG, "SnackBar Finished with object " + object + ", action button pressed " + actionPressed);
     }
 }
