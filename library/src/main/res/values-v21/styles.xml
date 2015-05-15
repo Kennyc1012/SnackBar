@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="TextAppearance.Medium" parent="android:TextAppearance">
+    <style name="SnackBar.TextAppearance.Medium" parent="android:TextAppearance">
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
