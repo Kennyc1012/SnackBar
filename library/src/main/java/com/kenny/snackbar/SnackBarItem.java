@@ -72,13 +72,13 @@ public class SnackBarItem {
     private String mActionMessage;
 
     // The color of the background
-    private int mSnackBarColor = -1;
+    private int mSnackBarColor = Color.TRANSPARENT;
 
     // The color of the message
-    private int mMessageColor = -1;
+    private int mMessageColor = Color.TRANSPARENT;
 
     // The default color the action item will be
-    private int mActionColor = -1;
+    private int mActionColor = Color.TRANSPARENT;
 
     /* Flag for when the animation is canceled, should the item be disposed of. Will be set to false when
      the action button is selected so it removes immediately.*/
@@ -222,7 +222,7 @@ public class SnackBarItem {
         TypedArray a = context.obtainStyledAttributes(ATTR);
         Resources res = context.getResources();
 
-        if (mSnackBarColor == -1) mSnackBarColor = a.getColor(0, res.getColor(R.color.snack_bar_bg));
+        if (mSnackBarColor == Color.TRANSPARENT) mSnackBarColor = a.getColor(0, res.getColor(R.color.snack_bar_bg));
         if (mAnimationDuration == -1) mAnimationDuration = a.getInt(1, 3000);
 
         if (mInterpolator == null) {
@@ -230,8 +230,8 @@ public class SnackBarItem {
             mInterpolator = AnimationUtils.loadInterpolator(mActivity, id);
         }
 
-        if (mActionColor == -1) mActionColor = a.getColor(3, res.getColor(R.color.snack_bar_action_default));
-        if (mMessageColor == -1) mMessageColor = a.getColor(4, Color.WHITE);
+        if (mActionColor == Color.TRANSPARENT) mActionColor = a.getColor(3, res.getColor(R.color.snack_bar_action_default));
+        if (mMessageColor == Color.TRANSPARENT) mMessageColor = a.getColor(4, Color.WHITE);
 
         if (mMessageTypeface == null) {
             String fontFile = a.getNonResourceString(5);
