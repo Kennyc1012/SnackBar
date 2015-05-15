@@ -23,6 +23,7 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -95,8 +96,7 @@ public class SnackBarItem {
 
     private long mAnimationDuration = -1;
 
-    @InterpolatorRes
-    private int mInterpolatorId = -1;
+    private Interpolator mInterpolator;
 
     private Object mObject;
 
@@ -154,8 +154,6 @@ public class SnackBarItem {
             setupActionButton((Button) mSnackBarView.findViewById(R.id.action));
         }
 
-        if (mAnimationDuration <= 0) mAnimationDuration = mActivity.getResources().getInteger(R.integer.snackbar_duration_length);
-        if (mInterpolatorId == -1) mInterpolatorId = android.R.interpolator.accelerate_decelerate;
         parent.addView(mSnackBarView);
         createShowAnimation();
     }
@@ -226,7 +224,12 @@ public class SnackBarItem {
 
         if (mSnackBarColor == -1) mSnackBarColor = a.getColor(0, res.getColor(R.color.snack_bar_bg));
         if (mAnimationDuration == -1) mAnimationDuration = a.getInt(1, 3000);
-        if (mInterpolatorId == -1) mInterpolatorId = a.getResourceId(2, android.R.anim.accelerate_decelerate_interpolator);
+
+        if (mInterpolator == null) {
+            int id = a.getResourceId(2, android.R.interpolator.accelerate_decelerate);
+            mInterpolator = AnimationUtils.loadInterpolator(mActivity, id);
+        }
+
         if (mActionColor == -1) mActionColor = a.getColor(3, res.getColor(R.color.snack_bar_action_default));
         if (mMessageColor == -1) mMessageColor = a.getColor(4, Color.WHITE);
 
@@ -276,7 +279,7 @@ public class SnackBarItem {
      */
     private void createShowAnimation() {
         mAnimator = new AnimatorSet();
-        mAnimator.setInterpolator(AnimationUtils.loadInterpolator(mActivity, mInterpolatorId));
+        mAnimator.setInterpolator(mInterpolator);
         Animator appear = getAppearAnimation();
         appear.setTarget(mSnackBarView);
         List<Animator> appearAnimations = new ArrayList<>();
@@ -546,8 +549,19 @@ public class SnackBarItem {
          * @param interpolator
          * @return
          */
+        public Builder setInterpolator(Interpolator interpolator) {
+            mSnackBarItem.mInterpolator = interpolator;
+            return this;
+        }
+
+        /**
+         * Set the Interpolator of the SnackBar animation
+         *
+         * @param interpolator
+         * @return
+         */
         public Builder setInterpolatorResource(@InterpolatorRes int interpolator) {
-            mSnackBarItem.mInterpolatorId = interpolator;
+            mSnackBarItem.mInterpolator = AnimationUtils.loadInterpolator(mSnackBarItem.mActivity, interpolator);
             return this;
         }
 
