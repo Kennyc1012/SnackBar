@@ -9,13 +9,17 @@
         android:id="@+id/message"
         style="@style/Snack_Bar_Title"
         android:layout_weight="1"
-        tools:text="This is a SnackBar!" />
+        android:alpha="0"
+        tools:text="This is a SnackBar!"
+        tools:alpha="1" />
 
     <Button
         android:id="@+id/action"
         style="@style/Snack_Bar_Button"
+        android:alpha="0"
         tools:visibility="visible"
         tools:text="UNDO"
-        tools:textColor="#ffffff" />
+        tools:textColor="#ffffff"
+        tools:alpha="1" />
 
 </LinearLayout>

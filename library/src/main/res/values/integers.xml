@@ -2,7 +2,8 @@
 <resources>
 
     <integer name="snackbar_appear_animation_length">300</integer>
-    <integer name="snackbar_disappear_animation_length">250</integer>
+    <integer name="snackbar_disappear_animation_length">350</integer>
     <integer name="snackbar_duration_length">3000</integer>
+    <integer name="snackbar_ui_delay">150</integer>
 
 </resources>

@@ -17,6 +17,8 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.InterpolatorRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
 import android.text.TextUtils;
@@ -116,6 +118,10 @@ public class SnackBarItem {
 
     private boolean mActionButtonPressed = false;
 
+    private float mToAnimation = 0;
+
+    private float mFromAnimation = 0;
+
     private SnackBarItem(Activity activty) {
         mActivity = activty;
     }
@@ -144,6 +150,7 @@ public class SnackBarItem {
 
         setupGestureDetector();
         TextView messageTV = (TextView) mSnackBarView.findViewById(R.id.message);
+        Button actionBtn = null;
         messageTV.setText(mMessageString);
         messageTV.setTextColor(mMessageColor);
         if (mMessageTextAppearance != -1) messageTV.setTextAppearance(mActivity, mMessageTextAppearance);
@@ -151,11 +158,11 @@ public class SnackBarItem {
 
         if (!TextUtils.isEmpty(mActionMessage)) {
             // Only set up the action button when an action message has been supplied
-            setupActionButton((Button) mSnackBarView.findViewById(R.id.action));
+            setupActionButton(actionBtn = (Button) mSnackBarView.findViewById(R.id.action));
         }
 
         parent.addView(mSnackBarView);
-        createShowAnimation();
+        createShowAnimation(messageTV, actionBtn);
     }
 
     /**
@@ -276,19 +283,20 @@ public class SnackBarItem {
 
     /**
      * Sets up and starts the show animation
+     *
+     * @param message The TextView of the Message
+     * @param action  The Button of the action. May be null if no action is supplied
      */
-    private void createShowAnimation() {
+    private void createShowAnimation(@NonNull TextView message, @Nullable Button action) {
         mAnimator = new AnimatorSet();
         mAnimator.setInterpolator(mInterpolator);
-        Animator appear = getAppearAnimation();
-        appear.setTarget(mSnackBarView);
         List<Animator> appearAnimations = new ArrayList<>();
-        appearAnimations.add(appear);
+        appearAnimations.add(getAppearAnimation(message, action));
 
         // Only add this animation if the SnackBar should auto dismiss itself
         if (mAutoDismiss) {
             appearAnimations.add(ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 1.0f).setDuration(mAnimationDuration));
-            appearAnimations.add(ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 0.0f).setDuration(mActivity.getResources().getInteger(R.integer.snackbar_disappear_animation_length)));
+            appearAnimations.add(ObjectAnimator.ofFloat(mSnackBarView, "translationY", mToAnimation, mFromAnimation).setDuration(mActivity.getResources().getInteger(R.integer.snackbar_disappear_animation_length)));
         }
 
         mAnimator.playSequentially(appearAnimations);
@@ -322,7 +330,7 @@ public class SnackBarItem {
      * Sets up and starts the hide animation
      */
     private void createHideAnimation() {
-        ObjectAnimator anim = ObjectAnimator.ofFloat(mSnackBarView, "alpha", 1.0f, 0.0f)
+        ObjectAnimator anim = ObjectAnimator.ofFloat(mSnackBarView, "translationY", mToAnimation, mFromAnimation)
                 .setDuration(mActivity.getResources().getInteger(R.integer.snackbar_disappear_animation_length));
 
         anim.addListener(new AnimatorListenerAdapter() {
@@ -344,23 +352,37 @@ public class SnackBarItem {
     /**
      * Returns the animator for the appear animation
      *
+     * @param message The TextView of the Message
+     * @param action  The Button of the action. May be null if no action is supplied
      * @return
      */
-    private Animator getAppearAnimation() {
+    private Animator getAppearAnimation(@NonNull TextView message, @Nullable Button action) {
         Resources res = mActivity.getResources();
-        float animationFrom = res.getDimension(R.dimen.snack_bar_height);
-        float animationTo = res.getDimension(R.dimen.snack_bar_animation_position) - mSnackBarOffset;
+        mFromAnimation = res.getDimension(R.dimen.snack_bar_height);
+        mToAnimation = res.getDimension(R.dimen.snack_bar_animation_position) - mSnackBarOffset;
+        int delay = res.getInteger(R.integer.snackbar_ui_delay);
 
         if (hasTranslucentNavigationBar()) {
             int resourceId = res.getIdentifier("navigation_bar_height", "dimen", "android");
-            if (resourceId > 0) animationTo -= res.getDimensionPixelSize(resourceId);
+            if (resourceId > 0) mToAnimation -= res.getDimensionPixelSize(resourceId);
         }
 
         AnimatorSet set = new AnimatorSet();
+        List<Animator> animations = new ArrayList<>();
         set.setDuration(res.getInteger(R.integer.snackbar_appear_animation_length));
-        set.playTogether(
-                ObjectAnimator.ofFloat(mSnackBarView, "translationY", animationFrom, animationTo),
-                ObjectAnimator.ofFloat(mSnackBarView, "alpha", 0.0f, 1.0f));
+        animations.add(ObjectAnimator.ofFloat(mSnackBarView, "translationY", mFromAnimation, mToAnimation));
+
+        ObjectAnimator messageAnim = ObjectAnimator.ofFloat(message, "alpha", 0.0f, 1.0f);
+        messageAnim.setStartDelay(delay);
+        animations.add(messageAnim);
+
+        if (action != null) {
+            ObjectAnimator actionAnim = ObjectAnimator.ofFloat(action, "alpha", 0.0f, 1.0f);
+            actionAnim.setStartDelay(delay);
+            animations.add(actionAnim);
+        }
+
+        set.playTogether(animations);
         return set;
     }
 
