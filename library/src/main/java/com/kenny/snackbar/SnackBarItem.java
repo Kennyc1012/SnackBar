@@ -150,7 +150,7 @@ public class SnackBarItem {
         if (mMessageTypeface != null) messageTV.setTypeface(mMessageTypeface);
 
         if (!TextUtils.isEmpty(mActionMessage)) {
-            // Only set up the action button when an action message ahs been supplied
+            // Only set up the action button when an action message has been supplied
             setupActionButton((Button) mSnackBarView.findViewById(R.id.action));
         }
 
@@ -390,11 +390,14 @@ public class SnackBarItem {
     public static class Builder {
         private SnackBarItem mSnackBarItem;
 
+        private Resources mResources;
+
         /**
          * Factory for creating SnackBarItems
          */
         public Builder(Activity activity) {
             mSnackBarItem = new SnackBarItem(activity);
+            mResources = activity.getResources();
         }
 
         /**
@@ -415,7 +418,7 @@ public class SnackBarItem {
          * @return
          */
         public Builder setMessageResource(@StringRes int message) {
-            mSnackBarItem.mMessageString = mSnackBarItem.mActivity.getString(message);
+            mSnackBarItem.mMessageString = mResources.getString(message);
             return this;
         }
 
@@ -440,7 +443,7 @@ public class SnackBarItem {
          * @return
          */
         public Builder setActionMessageResource(@StringRes int actionMessage) {
-            mSnackBarItem.mActionMessage = mSnackBarItem.mActivity.getString(actionMessage);
+            mSnackBarItem.mActionMessage = mResources.getString(actionMessage);
             return this;
         }
 
@@ -473,7 +476,7 @@ public class SnackBarItem {
          * @return
          */
         public Builder setActionMessageColorResource(@ColorRes int color) {
-            mSnackBarItem.mActionColor = mSnackBarItem.mActivity.getResources().getColor(color);
+            mSnackBarItem.mActionColor = mResources.getColor(color);
             return this;
         }
 
@@ -495,7 +498,7 @@ public class SnackBarItem {
          * @return
          */
         public Builder setSnackBarBackgroundColorResource(@ColorRes int color) {
-            mSnackBarItem.mSnackBarColor = mSnackBarItem.mActivity.getResources().getColor(color);
+            mSnackBarItem.mSnackBarColor = mResources.getColor(color);
             return this;
         }
 
@@ -517,7 +520,7 @@ public class SnackBarItem {
          * @return
          */
         public Builder setSnackBarMessageColorResource(@ColorRes int color) {
-            mSnackBarItem.mMessageColor = mSnackBarItem.mActivity.getResources().getColor(color);
+            mSnackBarItem.mMessageColor = mResources.getColor(color);
             return this;
         }
 
@@ -539,7 +542,7 @@ public class SnackBarItem {
          * @return
          */
         public Builder setDurationResource(@IntegerRes int duration) {
-            mSnackBarItem.mAnimationDuration = mSnackBarItem.mActivity.getResources().getInteger(duration);
+            mSnackBarItem.mAnimationDuration = mResources.getInteger(duration);
             return this;
         }
 
@@ -661,7 +664,7 @@ public class SnackBarItem {
          * @return
          */
         public Builder setSnackBarOffsetResource(@DimenRes int offset) {
-            mSnackBarItem.mSnackBarOffset = mSnackBarItem.mActivity.getResources().getDimension(offset);
+            mSnackBarItem.mSnackBarOffset = mResources.getDimension(offset);
             return this;
         }
 

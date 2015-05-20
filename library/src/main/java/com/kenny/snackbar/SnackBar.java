@@ -30,11 +30,9 @@ public class SnackBar {
      * @param message  The Sting Resource of the message to show
      */
     public static void show(Activity activity, @StringRes int message) {
-        SnackBarItem sbi = new SnackBarItem.Builder(activity)
+        new SnackBarItem.Builder(activity)
                 .setMessageResource(message)
-                .build();
-
-        SnackBarManager.getInstance().addSnackBar(activity, sbi);
+                .show();
     }
 
     /**
@@ -46,13 +44,11 @@ public class SnackBar {
      * @param onClickListener The onclick listener for the action button
      */
     public static void show(Activity activity, @StringRes int message, @StringRes int actionMessage, View.OnClickListener onClickListener) {
-        SnackBarItem sbi = new SnackBarItem.Builder(activity)
+        new SnackBarItem.Builder(activity)
                 .setMessageResource(message)
                 .setActionMessageResource(actionMessage)
                 .setActionClickListener(onClickListener)
-                .build();
-
-        SnackBarManager.getInstance().addSnackBar(activity, sbi);
+                .show();
     }
 
     /**
@@ -62,11 +58,9 @@ public class SnackBar {
      * @param message  The  message to show
      */
     public static void show(Activity activity, String message) {
-        SnackBarItem sbi = new SnackBarItem.Builder(activity)
+        new SnackBarItem.Builder(activity)
                 .setMessage(message)
-                .build();
-
-        SnackBarManager.getInstance().addSnackBar(activity, sbi);
+                .show();
     }
 
     /**
@@ -78,13 +72,11 @@ public class SnackBar {
      * @param onClickListener The onclick listener for the action button
      */
     public static void show(Activity activity, String message, String actionMessage, View.OnClickListener onClickListener) {
-        SnackBarItem sbi = new SnackBarItem.Builder(activity)
+        new SnackBarItem.Builder(activity)
                 .setMessage(message)
                 .setActionMessage(actionMessage)
                 .setActionClickListener(onClickListener)
-                .build();
-
-        SnackBarManager.getInstance().addSnackBar(activity, sbi);
+                .show();
     }
 
     /**
@@ -95,12 +87,10 @@ public class SnackBar {
      * @param listener The SnackBarListener to handle callbacks
      */
     public static void show(Activity activity, @StringRes int message, SnackBarListener listener) {
-        SnackBarItem sbi = new SnackBarItem.Builder(activity)
+        new SnackBarItem.Builder(activity)
                 .setMessage(activity.getString(message))
                 .setSnackBarListener(listener)
-                .build();
-
-        SnackBarManager.getInstance().addSnackBar(activity, sbi);
+                .show();
     }
 
     /**
@@ -112,13 +102,11 @@ public class SnackBar {
      * @param listener      The SnackBarListener to handle callbacks
      */
     public static void show(Activity activity, @StringRes int message, @StringRes int actionMessage, SnackBarListener listener) {
-        SnackBarItem sbi = new SnackBarItem.Builder(activity)
+        new SnackBarItem.Builder(activity)
                 .setMessage(activity.getString(message))
                 .setActionMessage(activity.getString(actionMessage))
                 .setSnackBarListener(listener)
-                .build();
-
-        SnackBarManager.getInstance().addSnackBar(activity, sbi);
+                .show();
     }
 
     /**
@@ -130,13 +118,11 @@ public class SnackBar {
      * @param listener      The SnackBarListener to handle callbacks
      */
     public static void show(Activity activity, String message, String actionMessage, SnackBarListener listener) {
-        SnackBarItem sbi = new SnackBarItem.Builder(activity)
+        new SnackBarItem.Builder(activity)
                 .setMessage(message)
                 .setActionMessage(actionMessage)
                 .setSnackBarListener(listener)
-                .build();
-
-        SnackBarManager.getInstance().addSnackBar(activity, sbi);
+                .show();
     }
 
     /**
@@ -147,12 +133,10 @@ public class SnackBar {
      * @param listener The SnackBarListener to handle callbacks
      */
     public static void show(Activity activity, String message, SnackBarListener listener) {
-        SnackBarItem sbi = new SnackBarItem.Builder(activity)
+        new SnackBarItem.Builder(activity)
                 .setMessage(message)
                 .setSnackBarListener(listener)
-                .build();
-
-        SnackBarManager.getInstance().addSnackBar(activity, sbi);
+                .show();
     }
 
     /**
@@ -192,15 +176,15 @@ public class SnackBar {
     private static class SnackBarManager {
         private final ConcurrentHashMap<Activity, ConcurrentLinkedQueue<SnackBarItem>> mQueue = new ConcurrentHashMap<>();
 
-        private static SnackBarManager mManager;
+        private static SnackBarManager sManager;
 
         private boolean mIsShowingSnackBar = false;
 
         private boolean mIsCanceling = false;
 
         public static SnackBarManager getInstance() {
-            if (mManager == null) mManager = new SnackBarManager();
-            return mManager;
+            if (sManager == null) sManager = new SnackBarManager();
+            return sManager;
         }
 
         /**
