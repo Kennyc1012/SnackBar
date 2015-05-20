@@ -111,11 +111,11 @@ repositories {
 
 
 dependencies {
-    compile 'com.kennyc:snackbar:2.4'
+    compile 'com.kennyc:snackbar:2.5'
 }
 ```
 
-If you need support for pre HoneyComb, you can still use the 1.1 release, but all support has been dropped for it
+If you need support for pre HoneyComb, you can still use the 1.1 release, but all support has been dropped and lacks most of the 2.x+ features 
 ```groovy
 repositories {
    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
