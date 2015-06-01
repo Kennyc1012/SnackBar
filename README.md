@@ -1,3 +1,9 @@
+DEPRECATED
+=========
+With the addition of Snackbars to the [android design support library](http://developer.android.com/tools/support-library/features.html#design) this library is no longer under development.
+
+
+
 SnackBar
 ========
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Kennyc1012%2FSnackBar-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/997)
@@ -90,16 +96,7 @@ public void onSnackBarFinished(Object object, boolean actionPressed){
 ### When your activity goes into a Paused or Destroyed state, remove the SnackBars from the queue
 ```java
 SnackBar.cancelSnackBars(getActivity());
-```
-
-#Migrating from 1.X 
-Version 2.X has brought many changes. 
-
-First, support for pre HoneyComb has been dropped. Version 1.1 is still available, but no more work will be devoted to anything pre SDK 11. 
-
-Second, the snack_bar_text_action_color_pressed attribute has been removed. The action on the SnackBar is now a native button, so it will used the built in selector for the pressed states.
-
-Lastly, the SnackBarItem.Builder class now takes an activity in the constructor to allow the passing of resource ids into the builder methods. 
+``` 
 
 
 #Including in your project
@@ -112,20 +109,6 @@ repositories {
 
 dependencies {
     compile 'com.kennyc:snackbar:2.5'
-}
-```
-
-If you need support for pre HoneyComb, you can still use the 1.1 release, but all support has been dropped and lacks most of the 2.x+ features 
-```groovy
-repositories {
-   maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-}
-
-
-dependencies {
-    // For api8+ you also need to comple NineOldAndroids
-    compile 'com.github.kennyc1012:snackbar:1.1-SNAPSHOT:api8Release@aar'
-    compile 'com.nineoldandroids:library:2.4.0'
 }
 ```
 
